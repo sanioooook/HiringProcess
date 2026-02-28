@@ -1,0 +1,303 @@
+<h2 mat-dialog-title>
+  {{ data.mode === 'create' ? 'Add Application' : 'Edit Application' }}
+</h2>
+
+<mat-dialog-content class="dialog-content">
+  <form [formGroup]="form">
+    <mat-tab-group animationDuration="200ms">
+
+      <!-- Tab 1: Basic Info -->
+      <mat-tab label="Basic Info">
+        <div class="tab-body">
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Company Name *</mat-label>
+            <input matInput formControlName="companyName" />
+            @if (form.controls.companyName.hasError('required')) {
+              <mat-error>Company name is required</mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Contact Channel: preset select + custom input -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Contact Channel *</mat-label>
+            <mat-select formControlName="contactChannel">
+              @for (opt of contactChannels; track opt) {
+                <mat-option [value]="opt">{{ opt }}</mat-option>
+              }
+              @if (customContactChannel) {
+                <mat-option [value]="customContactChannel">{{ customContactChannel }}</mat-option>
+              }
+            </mat-select>
+            @if (form.controls.contactChannel.hasError('required')) {
+              <mat-error>Contact channel is required</mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Custom channel entry -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Custom Channel (if not listed)</mat-label>
+            <input matInput [(ngModel)]="customContactChannel"
+                   [ngModelOptions]="{ standalone: true }"
+                   placeholder="e.g. Telegram"
+                   (change)="form.patchValue({ contactChannel: customContactChannel })" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Contact Person</mat-label>
+            <input matInput formControlName="contactPerson" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Salary Range</mat-label>
+            <input matInput formControlName="salaryRange" placeholder="e.g. $80k–$100k" />
+          </mat-form-field>
+
+        </div>
+      </mat-tab>
+
+      <!-- Tab 2: Dates -->
+      <mat-tab label="Dates">
+        <div class="tab-body dates-grid">
+
+          <mat-form-field appearance="outline">
+            <mat-label>First Contact Date</mat-label>
+            <input matInput [matDatepicker]="dp1" formControlName="firstContactDate" />
+            <mat-datepicker-toggle matIconSuffix [for]="dp1" />
+            <mat-datepicker #dp1 />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Last Contact Date</mat-label>
+            <input matInput [matDatepicker]="dp2" formControlName="lastContactDate" />
+            <mat-datepicker-toggle matIconSuffix [for]="dp2" />
+            <mat-datepicker #dp2 />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Vacancy Published</mat-label>
+            <input matInput [matDatepicker]="dp3" formControlName="vacancyPublishedDate" />
+            <mat-datepicker-toggle matIconSuffix [for]="dp3" />
+            <mat-datepicker #dp3 />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Application Date</mat-label>
+            <input matInput [matDatepicker]="dp4" formControlName="applicationDate" />
+            <mat-datepicker-toggle matIconSuffix [for]="dp4" />
+            <mat-datepicker #dp4 />
+          </mat-form-field>
+
+        </div>
+      </mat-tab>
+
+      <!-- Tab 3: Pipeline -->
+      <mat-tab label="Pipeline">
+        <div class="tab-body">
+
+          <!-- Stages chip builder -->
+          <div class="field-label">Hiring Stages</div>
+          <div class="stage-chip-list">
+            @for (stage of stages; track stage) {
+              <mat-chip-row (removed)="removeStage(stage)">
+                {{ stage }}
+                <button matChipRemove><mat-icon>cancel</mat-icon></button>
+              </mat-chip-row>
+            }
+          </div>
+
+          <!-- Add from preset -->
+          <mat-form-field appearance="outline" class="full-width" style="margin-top:12px">
+            <mat-label>Add Stage (preset)</mat-label>
+            <mat-select (selectionChange)="addStageFromPreset($event.value)">
+              @for (s of stagePresets; track s) {
+                <mat-option [value]="s">{{ s }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Add custom stage -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Custom Stage</mat-label>
+            <input matInput [(ngModel)]="newStageInput"
+                   [ngModelOptions]="{ standalone: true }"
+                   placeholder="Type and press Enter"
+                   (keydown.enter)="addCustomStage(); $event.preventDefault()" />
+            <button matSuffix mat-icon-button type="button"
+                    (click)="addCustomStage()"
+                    matTooltip="Add stage">
+              <mat-icon>add</mat-icon>
+            </button>
+          </mat-form-field>
+
+          <!-- Current stage -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Current Stage</mat-label>
+            <mat-select formControlName="currentStage">
+              <mat-option value="">— None —</mat-option>
+              @for (s of stages; track s) {
+                <mat-option [value]="s">{{ s }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Applied With -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Applied With</mat-label>
+            <mat-select formControlName="appliedWith">
+              <mat-option value="">— None —</mat-option>
+              @for (opt of appliedWithOpts; track opt) {
+                <mat-option [value]="opt">{{ opt }}</mat-option>
+              }
+              @if (customAppliedWith) {
+                <mat-option [value]="customAppliedWith">{{ customAppliedWith }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Applied Link</mat-label>
+            <input matInput formControlName="appliedLink" type="url" />
+            @if (form.controls.appliedLink.hasError('pattern')) {
+              <mat-error>Must be a valid URL (https://...)</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Vacancy Link</mat-label>
+            <input matInput formControlName="vacancyLink" type="url" />
+            @if (form.controls.vacancyLink.hasError('pattern')) {
+              <mat-error>Must be a valid URL (https://...)</mat-error>
+            }
+          </mat-form-field>
+
+        </div>
+      </mat-tab>
+
+      <!-- Tab 4: Notes & Text -->
+      <mat-tab label="Notes & Text">
+        <div class="tab-body">
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Cover Letter (Markdown supported)</mat-label>
+            <textarea matInput formControlName="coverLetter"
+                      rows="6" placeholder="Write your cover letter here..."></textarea>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Vacancy Text</mat-label>
+            <textarea matInput formControlName="vacancyText"
+                      rows="5" placeholder="Paste the job description here..."></textarea>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Notes (Markdown supported)</mat-label>
+            <textarea matInput formControlName="notes"
+                      rows="5" placeholder="Your private notes..."></textarea>
+          </mat-form-field>
+
+        </div>
+      </mat-tab>
+
+      <!-- Tab 5: File -->
+      <mat-tab label="Vacancy File">
+        <div class="tab-body">
+
+          @if (data.record?.hasVacancyFile) {
+            <p class="file-info">
+              <mat-icon>attach_file</mat-icon>
+              A file is already attached.
+              <a mat-button color="primary"
+                 [href]="data.record ? '/api/hiring-processes/' + data.record.id + '/file' : ''"
+                 target="_blank" download>Download</a>
+            </p>
+          }
+
+          <div class="file-upload-area">
+            <mat-icon class="upload-icon">cloud_upload</mat-icon>
+            <p>Upload Vacancy File (PDF or TXT, max 10 MB)</p>
+            <button mat-stroked-button type="button"
+                    (click)="fileInput.click()">
+              Choose File
+            </button>
+            <input #fileInput type="file" accept=".pdf,.txt"
+                   hidden (change)="onFileSelected($event)" />
+            @if (uploadFile) {
+              <p class="selected-file">
+                <mat-icon>check_circle</mat-icon>
+                {{ uploadFile.name }}
+              </p>
+            }
+          </div>
+
+        </div>
+      </mat-tab>
+
+    </mat-tab-group>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()" [disabled]="loading">Cancel</button>
+  <button mat-flat-button color="primary" (click)="submit()" [disabled]="loading">
+    @if (loading) {
+      <mat-spinner diameter="18" />
+    } @else {
+      {{ data.mode === 'create' ? 'Create' : 'Save Changes' }}
+    }
+  </button>
+</mat-dialog-actions>
+
+<style>
+  .dialog-content {
+    padding: 0 24px;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+  .tab-body {
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .dates-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .field-label {
+    font-size: 12px;
+    color: var(--mat-sys-on-surface-variant);
+    margin-bottom: 4px;
+  }
+  .file-upload-area {
+    border: 2px dashed var(--mat-sys-outline);
+    border-radius: 8px;
+    padding: 32px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .upload-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: var(--mat-sys-on-surface-variant);
+  }
+  .selected-file {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--mat-sys-primary);
+  }
+  .file-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  @media (max-width: 600px) {
+    .dates-grid { grid-template-columns: 1fr; }
+  }
+</style>

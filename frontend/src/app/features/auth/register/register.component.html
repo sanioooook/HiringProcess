@@ -1,0 +1,106 @@
+<div class="auth-page">
+  <mat-card class="auth-card">
+    <mat-card-header>
+      <mat-card-title>Create Account</mat-card-title>
+      <mat-card-subtitle>Job Application Tracker</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="submit()" class="auth-form">
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" type="email" autocomplete="email" />
+          <mat-icon matPrefix>email</mat-icon>
+          @if (form.controls.email.hasError('required')) {
+            <mat-error>Email is required</mat-error>
+          } @else if (form.controls.email.hasError('email')) {
+            <mat-error>Enter a valid email address</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Display Name</mat-label>
+          <input matInput formControlName="displayName" autocomplete="name" />
+          <mat-icon matPrefix>person</mat-icon>
+          @if (form.controls.displayName.hasError('required')) {
+            <mat-error>Display name is required</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Password</mat-label>
+          <input matInput formControlName="password"
+                 [type]="hidePass ? 'password' : 'text'"
+                 autocomplete="new-password" />
+          <mat-icon matPrefix>lock</mat-icon>
+          <button mat-icon-button matSuffix type="button" (click)="hidePass = !hidePass">
+            <mat-icon>{{ hidePass ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          @if (form.controls.password.hasError('required')) {
+            <mat-error>Password is required</mat-error>
+          } @else if (form.controls.password.hasError('minlength')) {
+            <mat-error>At least 8 characters required</mat-error>
+          } @else if (form.controls.password.hasError('pattern')) {
+            <mat-error>Must contain at least one uppercase letter and one digit</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Confirm Password</mat-label>
+          <input matInput formControlName="confirmPassword"
+                 [type]="hidePass ? 'password' : 'text'"
+                 autocomplete="new-password" />
+          <mat-icon matPrefix>lock_outline</mat-icon>
+          @if (form.hasError('passwordMismatch') && form.controls.confirmPassword.touched) {
+            <mat-error>Passwords do not match</mat-error>
+          }
+        </mat-form-field>
+
+        <button mat-flat-button color="primary" type="submit"
+                class="full-width submit-btn" [disabled]="loading">
+          @if (loading) {
+            <mat-spinner diameter="20" />
+          } @else {
+            Create Account
+          }
+        </button>
+
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <span class="auth-link-text">Already have an account?</span>
+      <a mat-button routerLink="/login">Sign In</a>
+    </mat-card-actions>
+  </mat-card>
+</div>
+
+<style>
+  .auth-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 16px;
+  }
+  .auth-card {
+    width: 100%;
+    max-width: 420px;
+  }
+  .auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 16px;
+  }
+  .submit-btn {
+    margin-top: 8px;
+    height: 44px;
+  }
+  .auth-link-text {
+    font-size: 14px;
+    color: var(--mat-sys-on-surface-variant);
+    margin-right: 4px;
+  }
+</style>

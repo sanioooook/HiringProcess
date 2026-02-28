@@ -1,0 +1,7 @@
+**/.vs
+**/.git
+**/bin
+**/obj
+**/.dockerignore
+**/node_modules
+uploads/

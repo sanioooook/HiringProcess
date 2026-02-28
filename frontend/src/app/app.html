@@ -1,0 +1,39 @@
+@if (auth.isLoggedIn()) {
+  <mat-toolbar color="primary" class="app-toolbar">
+    <span class="app-title">
+      <mat-icon>work</mat-icon>
+      Job Application Tracker
+    </span>
+
+    <span class="spacer"></span>
+
+    <!-- Theme toggle -->
+    <button mat-icon-button
+            (click)="toggleTheme()"
+            [matTooltip]="isDark() ? 'Switch to light theme' : 'Switch to dark theme'">
+      <mat-icon>{{ isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+    </button>
+
+    <!-- User menu -->
+    <button mat-button [matMenuTriggerFor]="userMenu">
+      <mat-icon>account_circle</mat-icon>
+      {{ auth.user()?.displayName }}
+    </button>
+
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item disabled>
+        <mat-icon>email</mat-icon>
+        {{ auth.user()?.email }}
+      </button>
+      <button mat-menu-item (click)="auth.logout()">
+        <mat-icon>logout</mat-icon>
+        Sign Out
+      </button>
+    </mat-menu>
+  </mat-toolbar>
+}
+
+<!-- Page content -->
+<div class="page-content">
+  <router-outlet />
+</div>

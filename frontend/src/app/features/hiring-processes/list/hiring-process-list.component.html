@@ -1,0 +1,248 @@
+<!-- Toolbar -->
+<div class="list-toolbar">
+
+  <!-- Search -->
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-label>Search</mat-label>
+    <input matInput [ngModel]="searchTerm"
+           (ngModelChange)="onSearch($event)"
+           placeholder="Company, stage, contact..." />
+    <mat-icon matPrefix>search</mat-icon>
+  </mat-form-field>
+
+  <span class="spacer"></span>
+
+  <!-- Column toggle -->
+  <button mat-stroked-button (click)="openColumnSelector()"
+          matTooltip="Manage columns">
+    <mat-icon>view_column</mat-icon>
+    Columns
+  </button>
+
+  <!-- Add -->
+  <button mat-flat-button color="primary" (click)="openCreate()">
+    <mat-icon>add</mat-icon>
+    Add Application
+  </button>
+
+</div>
+
+<!-- Progress bar -->
+@if (loading()) {
+  <mat-progress-bar mode="indeterminate" />
+}
+
+<!-- Table -->
+<div class="hiring-table-container">
+  <mat-table [dataSource]="data()" matSort (matSortChange)="onSort($event)"
+             class="hiring-table">
+
+    <!-- Company Name -->
+    <ng-container matColumnDef="companyName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header="companyName">Company</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <strong>{{ row.companyName }}</strong>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Current Stage -->
+    <ng-container matColumnDef="currentStage">
+      <mat-header-cell *matHeaderCellDef mat-sort-header="currentStage">Stage</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        @if (row.currentStage) {
+          <span class="stage-badge">{{ row.currentStage }}</span>
+        } @else {
+          <span class="muted">—</span>
+        }
+      </mat-cell>
+    </ng-container>
+
+    <!-- Contact Channel -->
+    <ng-container matColumnDef="contactChannel">
+      <mat-header-cell *matHeaderCellDef>Channel</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.contactChannel }}</mat-cell>
+    </ng-container>
+
+    <!-- Contact Person -->
+    <ng-container matColumnDef="contactPerson">
+      <mat-header-cell *matHeaderCellDef>Contact Person</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.contactPerson || '—' }}</mat-cell>
+    </ng-container>
+
+    <!-- Application Date -->
+    <ng-container matColumnDef="applicationDate">
+      <mat-header-cell *matHeaderCellDef mat-sort-header="applicationDate">Applied</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.applicationDate || '—' }}</mat-cell>
+    </ng-container>
+
+    <!-- First Contact Date -->
+    <ng-container matColumnDef="firstContactDate">
+      <mat-header-cell *matHeaderCellDef>First Contact</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.firstContactDate || '—' }}</mat-cell>
+    </ng-container>
+
+    <!-- Last Contact Date -->
+    <ng-container matColumnDef="lastContactDate">
+      <mat-header-cell *matHeaderCellDef>Last Contact</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.lastContactDate || '—' }}</mat-cell>
+    </ng-container>
+
+    <!-- Salary Range -->
+    <ng-container matColumnDef="salaryRange">
+      <mat-header-cell *matHeaderCellDef>Salary</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.salaryRange || '—' }}</mat-cell>
+    </ng-container>
+
+    <!-- Applied With -->
+    <ng-container matColumnDef="appliedWith">
+      <mat-header-cell *matHeaderCellDef>Applied With</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.appliedWith || '—' }}</mat-cell>
+    </ng-container>
+
+    <!-- Hiring Stages -->
+    <ng-container matColumnDef="hiringStages">
+      <mat-header-cell *matHeaderCellDef>Stages</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <div class="mini-chips">
+          @for (s of row.hiringStages.slice(0,3); track s) {
+            <span class="mini-chip">{{ s }}</span>
+          }
+          @if (row.hiringStages.length > 3) {
+            <span class="mini-chip muted">+{{ row.hiringStages.length - 3 }}</span>
+          }
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Updated At -->
+    <ng-container matColumnDef="updatedAt">
+      <mat-header-cell *matHeaderCellDef mat-sort-header="updatedAt">Updated</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        {{ row.updatedAt | date:'dd MMM yyyy' }}
+      </mat-cell>
+    </ng-container>
+
+    <!-- Actions -->
+    <ng-container matColumnDef="actions" stickyEnd>
+      <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <button mat-icon-button (click)="openEdit(row)" matTooltip="Edit">
+          <mat-icon>edit</mat-icon>
+        </button>
+        @if (row.hasVacancyFile) {
+          <button mat-icon-button (click)="downloadFile(row)" matTooltip="Download file">
+            <mat-icon>download</mat-icon>
+          </button>
+        }
+        <button mat-icon-button color="warn" (click)="openDelete(row)" matTooltip="Delete">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns(); sticky: true" />
+    <mat-row *matRowDef="let row; columns: displayedColumns();"
+             class="table-row" />
+
+    <!-- Empty state -->
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell empty-cell" [attr.colspan]="displayedColumns().length">
+        <div class="empty-state">
+          <mat-icon>work_outline</mat-icon>
+          <p>No applications found.</p>
+          <button mat-stroked-button (click)="openCreate()">Add your first application</button>
+        </div>
+      </td>
+    </tr>
+
+  </mat-table>
+</div>
+
+<!-- Paginator -->
+<mat-paginator
+  [length]="totalCount()"
+  [pageSize]="pageSize"
+  [pageSizeOptions]="[10, 20, 50, 100]"
+  showFirstLastButtons
+  (page)="onPage($event)" />
+
+<style>
+  :host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .list-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 24px;
+    flex-wrap: wrap;
+  }
+
+  .search-field {
+    min-width: 240px;
+    flex: 0 1 320px;
+  }
+
+  .hiring-table {
+    width: 100%;
+  }
+
+  .stage-badge {
+    background: var(--mat-sys-primary-container);
+    color: var(--mat-sys-on-primary-container);
+    border-radius: 12px;
+    padding: 2px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .muted {
+    color: var(--mat-sys-on-surface-variant);
+    font-size: 13px;
+  }
+
+  .mini-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .mini-chip {
+    background: var(--mat-sys-surface-variant);
+    border-radius: 8px;
+    padding: 1px 8px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  .empty-cell {
+    padding: 48px 0 !important;
+    text-align: center;
+  }
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  .empty-state mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+  }
+
+  .table-row:hover {
+    background: var(--mat-sys-surface-variant);
+    cursor: pointer;
+  }
+
+  mat-paginator {
+    border-top: 1px solid var(--mat-sys-outline-variant);
+  }
+</style>

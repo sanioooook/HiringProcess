@@ -1,0 +1,25 @@
+# Secrets
+.env
+*.pfx
+*.key
+
+# .NET
+**/bin/
+**/obj/
+*.user
+.vs/
+.vscode/
+TestResults/
+*.trx
+*.coverage
+uploads/
+
+# Node / Angular
+node_modules/
+dist/
+.angular/
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
