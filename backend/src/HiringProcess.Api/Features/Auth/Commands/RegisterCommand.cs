@@ -16,5 +16,6 @@ public sealed record RegisterResponse(
     Guid UserId,
     string Email,
     string DisplayName,
-    string Token
+    string Token,
+    string Language
 );

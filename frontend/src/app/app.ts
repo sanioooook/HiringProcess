@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { AuthService } from './core/auth/auth.service';
+import { TranslatePipe } from './core/i18n/translate.pipe';
 
 const THEME_KEY = 'hp_dark_theme';
 
@@ -22,6 +23,7 @@ const THEME_KEY = 'hp_dark_theme';
     MatIconModule,
     MatTooltipModule,
     MatMenuModule,
+    TranslatePipe,
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',

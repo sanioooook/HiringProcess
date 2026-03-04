@@ -56,6 +56,11 @@ public sealed class AppDbContext : DbContext
 
             entity.Property(u => u.CreatedAt)
                   .IsRequired();
+
+            entity.Property(u => u.Language)
+                  .IsRequired()
+                  .HasMaxLength(8)
+                  .HasDefaultValue("en");
         });
     }
 

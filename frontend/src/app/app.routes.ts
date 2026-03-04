@@ -26,6 +26,14 @@ export const routes: Routes = [
         .then(m => m.HiringProcessListComponent),
   },
 
+  // Protected: settings
+  {
+    path: 'settings',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/settings/settings.component').then(m => m.SettingsComponent),
+  },
+
   // Catch-all fallback
   { path: '**', redirectTo: 'app' },
 ];

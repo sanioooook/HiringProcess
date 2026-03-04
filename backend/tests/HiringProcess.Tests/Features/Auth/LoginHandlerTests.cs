@@ -20,8 +20,8 @@ public sealed class LoginHandlerTests : IDisposable
         (_db, _connection) = TestDbContextFactory.Create();
         var config = BuildConfig();
         var jwt = new JwtService(config);
-        var validator = new LoginValidator();
-        _handler = new LoginHandler(_db, jwt, validator);
+        var validator = new LoginValidator(TestLocalization.Loc, TestLocalization.CurrentLang);
+        _handler = new LoginHandler(_db, jwt, validator, TestLocalization.Loc, TestLocalization.CurrentLang);
     }
 
     [Fact]

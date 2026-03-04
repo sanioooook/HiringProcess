@@ -1,0 +1,31 @@
+<div class="settings-page">
+  <mat-card class="settings-card">
+    <mat-card-header>
+      <mat-card-title>{{ 'settings.title' | translate }}</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="setting-row">
+        <p class="setting-label">{{ 'settings.language' | translate }}</p>
+        <mat-radio-group class="lang-group" [ngModel]="selectedLang()" (ngModelChange)="selectedLang.set($event)">
+          @for (lang of languages; track lang.value) {
+            <mat-radio-button [value]="lang.value">
+              {{ lang.labelKey | translate }}
+            </mat-radio-button>
+          }
+        </mat-radio-group>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <a mat-button routerLink="/app">{{ 'settings.back' | translate }}</a>
+      <button mat-flat-button color="primary" (click)="save()" [disabled]="loading()">
+        @if (loading()) {
+          <mat-spinner diameter="18" />
+        } @else {
+          {{ 'settings.save' | translate }}
+        }
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

@@ -17,4 +17,6 @@ public sealed class AppUser
 
     // Stored as UTC DateTime for SQLite/PostgreSQL compatibility
     public DateTime CreatedAt { get; set; }
+
+    public string Language { get; set; } = "en";
 }

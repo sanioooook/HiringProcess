@@ -1,35 +1,35 @@
 <div class="auth-page">
   <mat-card class="auth-card">
     <mat-card-header>
-      <mat-card-title>Create Account</mat-card-title>
-      <mat-card-subtitle>Job Application Tracker</mat-card-subtitle>
+      <mat-card-title>{{ 'auth.register.title' | translate }}</mat-card-title>
+      <mat-card-subtitle>{{ 'auth.register.subtitle' | translate }}</mat-card-subtitle>
     </mat-card-header>
 
     <mat-card-content>
       <form [formGroup]="form" (ngSubmit)="submit()" class="auth-form">
 
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Email</mat-label>
+          <mat-label>{{ 'field.email' | translate }}</mat-label>
           <input matInput formControlName="email" type="email" autocomplete="email" />
           <mat-icon matPrefix>email</mat-icon>
           @if (form.controls.email.hasError('required')) {
-            <mat-error>Email is required</mat-error>
+            <mat-error>{{ 'validation.emailRequired' | translate }}</mat-error>
           } @else if (form.controls.email.hasError('email')) {
-            <mat-error>Enter a valid email address</mat-error>
+            <mat-error>{{ 'validation.emailInvalid' | translate }}</mat-error>
           }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Display Name</mat-label>
+          <mat-label>{{ 'field.displayName' | translate }}</mat-label>
           <input matInput formControlName="displayName" autocomplete="name" />
           <mat-icon matPrefix>person</mat-icon>
           @if (form.controls.displayName.hasError('required')) {
-            <mat-error>Display name is required</mat-error>
+            <mat-error>{{ 'validation.displayNameRequired' | translate }}</mat-error>
           }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Password</mat-label>
+          <mat-label>{{ 'field.password' | translate }}</mat-label>
           <input matInput formControlName="password"
                  [type]="hidePass ? 'password' : 'text'"
                  autocomplete="new-password" />
@@ -38,22 +38,22 @@
             <mat-icon>{{ hidePass ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
           @if (form.controls.password.hasError('required')) {
-            <mat-error>Password is required</mat-error>
+            <mat-error>{{ 'validation.passwordRequired' | translate }}</mat-error>
           } @else if (form.controls.password.hasError('minlength')) {
-            <mat-error>At least 8 characters required</mat-error>
+            <mat-error>{{ 'validation.passwordMinLength' | translate }}</mat-error>
           } @else if (form.controls.password.hasError('pattern')) {
-            <mat-error>Must contain at least one uppercase letter and one digit</mat-error>
+            <mat-error>{{ 'validation.passwordPattern' | translate }}</mat-error>
           }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Confirm Password</mat-label>
+          <mat-label>{{ 'field.confirmPassword' | translate }}</mat-label>
           <input matInput formControlName="confirmPassword"
                  [type]="hidePass ? 'password' : 'text'"
                  autocomplete="new-password" />
           <mat-icon matPrefix>lock_outline</mat-icon>
           @if (form.hasError('passwordMismatch') && form.controls.confirmPassword.touched) {
-            <mat-error>Passwords do not match</mat-error>
+            <mat-error>{{ 'validation.passwordsMismatch' | translate }}</mat-error>
           }
         </mat-form-field>
 
@@ -62,7 +62,7 @@
           @if (loading) {
             <mat-spinner diameter="20" />
           } @else {
-            Create Account
+            {{ 'auth.register.submit' | translate }}
           }
         </button>
 
@@ -70,37 +70,8 @@
     </mat-card-content>
 
     <mat-card-actions align="end">
-      <span class="auth-link-text">Already have an account?</span>
-      <a mat-button routerLink="/login">Sign In</a>
+      <span class="auth-link-text">{{ 'auth.register.hasAccount' | translate }}</span>
+      <a mat-button routerLink="/login">{{ 'auth.register.signIn' | translate }}</a>
     </mat-card-actions>
   </mat-card>
 </div>
-
-<style>
-  .auth-page {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 16px;
-  }
-  .auth-card {
-    width: 100%;
-    max-width: 420px;
-  }
-  .auth-form {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding-top: 16px;
-  }
-  .submit-btn {
-    margin-top: 8px;
-    height: 44px;
-  }
-  .auth-link-text {
-    font-size: 14px;
-    color: var(--mat-sys-on-surface-variant);
-    margin-right: 4px;
-  }
-</style>

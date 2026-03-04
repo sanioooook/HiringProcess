@@ -2,7 +2,7 @@
   <mat-toolbar color="primary" class="app-toolbar">
     <span class="app-title">
       <mat-icon>work</mat-icon>
-      Job Application Tracker
+      {{ 'app.title' | translate }}
     </span>
 
     <span class="spacer"></span>
@@ -10,7 +10,7 @@
     <!-- Theme toggle -->
     <button mat-icon-button
             (click)="toggleTheme()"
-            [matTooltip]="isDark() ? 'Switch to light theme' : 'Switch to dark theme'">
+            [matTooltip]="isDark() ? ('app.theme.toLight' | translate) : ('app.theme.toDark' | translate)">
       <mat-icon>{{ isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
     </button>
 
@@ -25,9 +25,13 @@
         <mat-icon>email</mat-icon>
         {{ auth.user()?.email }}
       </button>
+      <button mat-menu-item routerLink="/settings">
+        <mat-icon>settings</mat-icon>
+        {{ 'app.menu.settings' | translate }}
+      </button>
       <button mat-menu-item (click)="auth.logout()">
         <mat-icon>logout</mat-icon>
-        Sign Out
+        {{ 'app.menu.signOut' | translate }}
       </button>
     </mat-menu>
   </mat-toolbar>

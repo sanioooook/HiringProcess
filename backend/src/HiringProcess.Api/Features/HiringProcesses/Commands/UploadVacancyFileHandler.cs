@@ -1,4 +1,5 @@
 using HiringProcess.Api.Common;
+using HiringProcess.Api.Common.Localization;
 using HiringProcess.Api.Infrastructure;
 using HiringProcess.Api.Infrastructure.FileStorage;
 using Microsoft.EntityFrameworkCore;
@@ -13,37 +14,47 @@ public sealed class UploadVacancyFileHandler
 {
     private readonly AppDbContext _db;
     private readonly IFileStorageService _fileStorage;
+    private readonly ILocalizationService _loc;
+    private readonly ICurrentLanguageService _currentLang;
 
-    public UploadVacancyFileHandler(AppDbContext db, IFileStorageService fileStorage)
+    public UploadVacancyFileHandler(
+        AppDbContext db,
+        IFileStorageService fileStorage,
+        ILocalizationService loc,
+        ICurrentLanguageService currentLang)
     {
         _db = db;
         _fileStorage = fileStorage;
+        _loc = loc;
+        _currentLang = currentLang;
     }
 
     public async Task<Result<UploadVacancyFileResponse>> HandleAsync(
         UploadVacancyFileCommand command,
         CancellationToken ct = default)
     {
-        // 1. Validate extension before touching storage
+        var lang = _currentLang.Language;
+
+        // Validate extension before touching storage
         var extension = Path.GetExtension(command.OriginalFileName).ToLowerInvariant();
         if (extension is not ".pdf" and not ".txt")
-            return Error.Validation("Only PDF and TXT files are accepted.");
+            return Error.Validation(_loc.Get("hp.onlyPdfTxt", lang));
 
-        // 2. Load entity with ownership check
+        // Load entity with ownership check
         var entity = await _db.HiringProcesses
             .FirstOrDefaultAsync(h => h.Id == command.HiringProcessId && h.UserId == command.UserId, ct);
 
         if (entity is null)
             return Error.NotFound;
 
-        // 3. Delete old file if present
+        // Delete old file if present
         if (entity.VacancyFileName is not null)
             await _fileStorage.DeleteAsync(entity.VacancyFileName, ct);
 
-        // 4. Save new file
+        // Save new file
         var storedName = await _fileStorage.SaveAsync(command.FileStream, command.OriginalFileName, ct);
 
-        // 5. Update entity
+        // Update entity
         entity.VacancyFileName = storedName;
         entity.UpdatedAt = DateTime.UtcNow;
 

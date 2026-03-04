@@ -1,26 +1,26 @@
 <div class="auth-page">
   <mat-card class="auth-card">
     <mat-card-header>
-      <mat-card-title>Sign In</mat-card-title>
-      <mat-card-subtitle>Job Application Tracker</mat-card-subtitle>
+      <mat-card-title>{{ 'auth.login.title' | translate }}</mat-card-title>
+      <mat-card-subtitle>{{ 'auth.login.subtitle' | translate }}</mat-card-subtitle>
     </mat-card-header>
 
     <mat-card-content>
       <form [formGroup]="form" (ngSubmit)="submit()" class="auth-form">
 
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Email</mat-label>
+          <mat-label>{{ 'field.email' | translate }}</mat-label>
           <input matInput formControlName="email" type="email" autocomplete="email" />
           <mat-icon matPrefix>email</mat-icon>
           @if (form.controls.email.hasError('required')) {
-            <mat-error>Email is required</mat-error>
+            <mat-error>{{ 'validation.emailRequired' | translate }}</mat-error>
           } @else if (form.controls.email.hasError('email')) {
-            <mat-error>Enter a valid email address</mat-error>
+            <mat-error>{{ 'validation.emailInvalid' | translate }}</mat-error>
           }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Password</mat-label>
+          <mat-label>{{ 'field.password' | translate }}</mat-label>
           <input matInput formControlName="password"
                  [type]="hidePass ? 'password' : 'text'"
                  autocomplete="current-password" />
@@ -29,7 +29,7 @@
             <mat-icon>{{ hidePass ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
           @if (form.controls.password.hasError('required')) {
-            <mat-error>Password is required</mat-error>
+            <mat-error>{{ 'validation.passwordRequired' | translate }}</mat-error>
           }
         </mat-form-field>
 
@@ -38,7 +38,7 @@
           @if (loading) {
             <mat-spinner diameter="20" />
           } @else {
-            Sign In
+            {{ 'auth.login.submit' | translate }}
           }
         </button>
 
@@ -46,37 +46,8 @@
     </mat-card-content>
 
     <mat-card-actions align="end">
-      <span class="auth-link-text">Don't have an account?</span>
-      <a mat-button routerLink="/register">Register</a>
+      <span class="auth-link-text">{{ 'auth.login.noAccount' | translate }}</span>
+      <a mat-button routerLink="/register">{{ 'auth.login.register' | translate }}</a>
     </mat-card-actions>
   </mat-card>
 </div>
-
-<style>
-  .auth-page {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 16px;
-  }
-  .auth-card {
-    width: 100%;
-    max-width: 420px;
-  }
-  .auth-form {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding-top: 16px;
-  }
-  .submit-btn {
-    margin-top: 8px;
-    height: 44px;
-  }
-  .auth-link-text {
-    font-size: 14px;
-    color: var(--mat-sys-on-surface-variant);
-    margin-right: 4px;
-  }
-</style>

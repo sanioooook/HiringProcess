@@ -1,5 +1,6 @@
 using Google.Apis.Auth;
 using HiringProcess.Api.Common;
+using HiringProcess.Api.Common.Localization;
 using HiringProcess.Api.Features.Auth.Models;
 using HiringProcess.Api.Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -15,18 +16,29 @@ public sealed class GoogleAuthHandler
     private readonly AppDbContext _db;
     private readonly JwtService _jwt;
     private readonly IConfiguration _config;
+    private readonly ILocalizationService _loc;
+    private readonly ICurrentLanguageService _currentLang;
 
-    public GoogleAuthHandler(AppDbContext db, JwtService jwt, IConfiguration config)
+    public GoogleAuthHandler(
+        AppDbContext db,
+        JwtService jwt,
+        IConfiguration config,
+        ILocalizationService loc,
+        ICurrentLanguageService currentLang)
     {
         _db = db;
         _jwt = jwt;
         _config = config;
+        _loc = loc;
+        _currentLang = currentLang;
     }
 
     public async Task<Result<GoogleAuthResponse>> HandleAsync(GoogleAuthCommand command, CancellationToken ct = default)
     {
+        var lang = _currentLang.Language;
+
         if (string.IsNullOrWhiteSpace(command.IdToken))
-            return Error.Validation("Google ID token is required.");
+            return Error.Validation(_loc.Get("auth.googleTokenRequired", lang));
 
         // Verify the Google ID token
         GoogleJsonWebSignature.Payload payload;
@@ -39,9 +51,9 @@ public sealed class GoogleAuthHandler
             };
             payload = await GoogleJsonWebSignature.ValidateAsync(command.IdToken, settings);
         }
-        catch (InvalidJwtException ex)
+        catch (InvalidJwtException)
         {
-            return Error.Custom("InvalidGoogleToken", $"Google token validation failed: {ex.Message}");
+            return Error.Custom("InvalidGoogleToken", _loc.Get("auth.googleFailed", lang));
         }
 
         var googleId = payload.Subject;
@@ -63,6 +75,7 @@ public sealed class GoogleAuthHandler
                 Email = email,
                 DisplayName = displayName,
                 GoogleId = googleId,
+                Language = lang,
                 CreatedAt = DateTime.UtcNow
             };
             _db.Users.Add(user);
@@ -80,6 +93,6 @@ public sealed class GoogleAuthHandler
         // Issue JWT
         var token = _jwt.GenerateToken(user);
 
-        return new GoogleAuthResponse(user.Id, user.Email, user.DisplayName, token, isNewUser);
+        return new GoogleAuthResponse(user.Id, user.Email, user.DisplayName, token, isNewUser, user.Language);
     }
 }

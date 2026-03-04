@@ -1,4 +1,5 @@
 using HiringProcess.Api.Common;
+using HiringProcess.Api.Common.Localization;
 using HiringProcess.Api.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,15 +11,22 @@ namespace HiringProcess.Api.Features.HiringProcesses.Queries;
 public sealed class GetHiringProcessesHandler
 {
     private readonly AppDbContext _db;
+    private readonly ILocalizationService _loc;
+    private readonly ICurrentLanguageService _currentLang;
 
-    public GetHiringProcessesHandler(AppDbContext db) => _db = db;
+    public GetHiringProcessesHandler(AppDbContext db, ILocalizationService loc, ICurrentLanguageService currentLang)
+    {
+        _db = db;
+        _loc = loc;
+        _currentLang = currentLang;
+    }
 
     public async Task<Result<PagedResult<HiringProcessDto>>> HandleAsync(
         GetHiringProcessesQuery query,
         CancellationToken ct = default)
     {
         if (query.Page < 1 || query.PageSize < 1 || query.PageSize > 100)
-            return Error.Validation("Page must be >= 1 and PageSize must be between 1 and 100.");
+            return Error.Validation(_loc.Get("hp.pageSize", _currentLang.Language));
 
         var q = _db.HiringProcesses
             .AsNoTracking()

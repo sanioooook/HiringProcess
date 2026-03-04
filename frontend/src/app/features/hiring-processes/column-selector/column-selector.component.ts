@@ -4,17 +4,18 @@ import { FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
+import { TranslatePipe } from '../../../core/i18n/translate.pipe';
 
 export interface ColumnDef {
   key: string;
-  label: string;
+  labelKey: string;
   visible: boolean;
 }
 
 @Component({
   selector: 'app-column-selector',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatDialogModule, MatCheckboxModule, MatButtonModule],
+  imports: [CommonModule, FormsModule, MatDialogModule, MatCheckboxModule, MatButtonModule, TranslatePipe],
   templateUrl: './column-selector.component.html',
   styleUrl: './column-selector.component.scss',
 })

@@ -3,6 +3,7 @@ export interface AuthResponse {
   email: string;
   displayName: string;
   token: string;
+  language: string;
 }
 
 export interface RegisterRequest {
@@ -24,4 +25,5 @@ export interface CurrentUser {
   userId: string;
   email: string;
   displayName: string;
+  language: string;
 }

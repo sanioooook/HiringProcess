@@ -1,9 +1,12 @@
 using System.Text;
 using FluentValidation;
+using HiringProcess.Api.Common.Localization;
+using HiringProcess.Api.Common.Middleware;
 using HiringProcess.Api.Features.Auth;
 using HiringProcess.Api.Features.Auth.Commands;
 using HiringProcess.Api.Features.HiringProcesses.Commands;
 using HiringProcess.Api.Features.HiringProcesses.Queries;
+using HiringProcess.Api.Features.UserSettings;
 using HiringProcess.Api.Infrastructure;
 using HiringProcess.Api.Infrastructure.FileStorage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -41,6 +44,10 @@ builder.Services.AddAuthorization();
 // Infrastructure
 builder.Services.AddSingleton<IFileStorageService, LocalFileStorageService>();
 
+// Localization
+builder.Services.AddSingleton<ILocalizationService, LocalizationService>();
+builder.Services.AddScoped<ICurrentLanguageService, CurrentLanguageService>();
+
 // Auth handlers / services
 builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<RegisterHandler>();
@@ -55,6 +62,10 @@ builder.Services.AddScoped<UpdateHiringProcessHandler>();
 builder.Services.AddScoped<DeleteHiringProcessHandler>();
 builder.Services.AddScoped<UploadVacancyFileHandler>();
 builder.Services.AddScoped<DownloadVacancyFileHandler>();
+
+// UserSettings handlers
+builder.Services.AddScoped<GetUserSettingsHandler>();
+builder.Services.AddScoped<UpdateUserSettingsHandler>();
 
 // FluentValidation
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterValidator>();
@@ -135,6 +146,7 @@ app.UseHttpsRedirection();
 app.UseCors("FrontendPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<LanguageMiddleware>();
 app.MapControllers();
 
 app.Run();

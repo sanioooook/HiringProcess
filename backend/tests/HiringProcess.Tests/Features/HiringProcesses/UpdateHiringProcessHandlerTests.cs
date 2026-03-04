@@ -17,7 +17,7 @@ public sealed class UpdateHiringProcessHandlerTests : IDisposable
     public UpdateHiringProcessHandlerTests()
     {
         (_db, _connection) = TestDbContextFactory.Create();
-        _handler = new UpdateHiringProcessHandler(_db, new UpdateHiringProcessValidator());
+        _handler = new UpdateHiringProcessHandler(_db, new UpdateHiringProcessValidator(TestLocalization.Loc, TestLocalization.CurrentLang));
     }
 
     [Fact]

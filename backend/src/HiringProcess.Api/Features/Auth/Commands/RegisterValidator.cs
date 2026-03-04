@@ -1,25 +1,32 @@
 using FluentValidation;
+using HiringProcess.Api.Common.Localization;
 
 namespace HiringProcess.Api.Features.Auth.Commands;
 
 public sealed class RegisterValidator : AbstractValidator<RegisterCommand>
 {
-    public RegisterValidator()
+    private readonly ILocalizationService _loc;
+    private readonly ICurrentLanguageService _currentLang;
+
+    public RegisterValidator(ILocalizationService loc, ICurrentLanguageService currentLang)
     {
+        _loc = loc;
+        _currentLang = currentLang;
+
         RuleFor(x => x.Email)
-            .NotEmpty().WithMessage("Email is required.")
-            .EmailAddress().WithMessage("Email must be a valid email address.")
+            .NotEmpty().WithMessage(_ => _loc.Get("auth.emailRequired", _currentLang.Language))
+            .EmailAddress().WithMessage(_ => _loc.Get("auth.emailInvalid", _currentLang.Language))
             .MaximumLength(320);
 
         RuleFor(x => x.DisplayName)
-            .NotEmpty().WithMessage("Display name is required.")
+            .NotEmpty().WithMessage(_ => _loc.Get("auth.displayNameRequired", _currentLang.Language))
             .MaximumLength(200);
 
         RuleFor(x => x.Password)
-            .NotEmpty().WithMessage("Password is required.")
-            .MinimumLength(8).WithMessage("Password must be at least 8 characters.")
+            .NotEmpty().WithMessage(_ => _loc.Get("auth.passwordRequired", _currentLang.Language))
+            .MinimumLength(8).WithMessage(_ => _loc.Get("auth.passwordMinLength", _currentLang.Language))
             .MaximumLength(128)
-            .Matches("[A-Z]").WithMessage("Password must contain at least one uppercase letter.")
-            .Matches("[0-9]").WithMessage("Password must contain at least one digit.");
+            .Matches("[A-Z]").WithMessage(_ => _loc.Get("auth.passwordUppercase", _currentLang.Language))
+            .Matches("[0-9]").WithMessage(_ => _loc.Get("auth.passwordDigit", _currentLang.Language));
     }
 }

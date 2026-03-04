@@ -22,6 +22,8 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { HiringProcess, HiringProcessForm } from '../../../core/api/hiring-process.model';
 import { HiringProcessApiService } from '../../../core/api/hiring-process-api.service';
+import { TranslatePipe } from '../../../core/i18n/translate.pipe';
+import { TranslationService } from '../../../core/i18n/translation.service';
 
 export interface FormDialogData {
   mode: 'create' | 'edit';
@@ -30,8 +32,10 @@ export interface FormDialogData {
 
 const CONTACT_CHANNELS = ['LinkedIn', 'Email', 'Referral', 'Job Board', 'Company Website', 'Recruiter', 'Cold Outreach'];
 const APPLIED_WITH_OPTIONS = ['Resume', 'Resume + Cover Letter', 'LinkedIn Profile', 'Portfolio', 'GitHub', 'Other'];
-const STAGE_PRESETS = ['Applied', 'Phone Screen', 'Technical Interview', 'Take-Home Task',
-                       'On-site Interview', 'Offer Received', 'Offer Accepted', 'Rejected', 'Withdrawn'];
+const STAGE_PRESETS = [
+  'stage.applied', 'stage.phoneScreen', 'stage.technicalInterview', 'stage.takeHomeTask',
+  'stage.onsiteInterview', 'stage.offerReceived', 'stage.offerAccepted', 'stage.rejected', 'stage.withdrawn',
+];
 
 @Component({
   selector: 'app-hiring-process-form-dialog',
@@ -53,6 +57,7 @@ const STAGE_PRESETS = ['Applied', 'Phone Screen', 'Technical Interview', 'Take-H
     MatTabsModule,
     MatSnackBarModule,
     MatTooltipModule,
+    TranslatePipe,
   ],
   templateUrl: './hiring-process-form-dialog.component.html',
   styleUrl: './hiring-process-form-dialog.component.scss',
@@ -72,6 +77,7 @@ export class HiringProcessFormDialogComponent implements OnInit {
   private fb = inject(FormBuilder);
   private api = inject(HiringProcessApiService);
   private snack = inject(MatSnackBar);
+  private ts = inject(TranslationService);
 
   form!: FormGroup;
   stages: string[] = [];
@@ -202,7 +208,7 @@ export class HiringProcessFormDialogComponent implements OnInit {
           this.api.uploadFile(saved.id, this.uploadFile).subscribe({
             next: () => this.dialogRef.close(true),
             error: () => {
-              this.snack.open('Record saved but file upload failed.', 'OK', { duration: 5000 });
+              this.snack.open(this.ts.t('snack.savedFileUploadFailed'), 'OK', { duration: 5000 });
               this.dialogRef.close(true);
             },
           });
@@ -212,7 +218,7 @@ export class HiringProcessFormDialogComponent implements OnInit {
       },
       error: (err) => {
         this.loading = false;
-        const msg = err?.error?.message ?? 'Save failed. Please try again.';
+        const msg = err?.error?.message ?? this.ts.t('snack.saveFailed');
         this.snack.open(msg, 'Close', { duration: 4000 });
       },
     });

@@ -4,6 +4,7 @@ import {
   ViewChild,
   signal,
   computed,
+  inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -36,22 +37,24 @@ import {
   ConfirmDialogComponent,
 } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { AuthService } from '../../../core/auth/auth.service';
+import { TranslatePipe } from '../../../core/i18n/translate.pipe';
+import { TranslationService } from '../../../core/i18n/translation.service';
 
 const COLUMNS_KEY = 'hp_columns';
 
 const ALL_COLUMNS: ColumnDef[] = [
-  { key: 'companyName',       label: 'Company',         visible: true  },
-  { key: 'currentStage',      label: 'Current Stage',   visible: true  },
-  { key: 'contactChannel',    label: 'Channel',         visible: true  },
-  { key: 'contactPerson',     label: 'Contact Person',  visible: false },
-  { key: 'applicationDate',   label: 'Applied',         visible: true  },
-  { key: 'firstContactDate',  label: 'First Contact',   visible: false },
-  { key: 'lastContactDate',   label: 'Last Contact',    visible: false },
-  { key: 'salaryRange',       label: 'Salary Range',    visible: false },
-  { key: 'appliedWith',       label: 'Applied With',    visible: false },
-  { key: 'hiringStages',      label: 'Stages',          visible: false },
-  { key: 'updatedAt',         label: 'Updated',         visible: true  },
-  { key: 'actions',           label: 'Actions',         visible: true  },
+  { key: 'companyName', labelKey: 'col.company', visible: true },
+  { key: 'currentStage', labelKey: 'col.stage', visible: true },
+  { key: 'contactChannel', labelKey: 'col.channel', visible: true },
+  { key: 'contactPerson', labelKey: 'col.contactPerson', visible: false },
+  { key: 'applicationDate', labelKey: 'col.applied', visible: true },
+  { key: 'firstContactDate', labelKey: 'col.firstContact', visible: false },
+  { key: 'lastContactDate', labelKey: 'col.lastContact', visible: false },
+  { key: 'salaryRange', labelKey: 'col.salary', visible: false },
+  { key: 'appliedWith', labelKey: 'col.appliedWith', visible: false },
+  { key: 'hiringStages', labelKey: 'col.stages', visible: false },
+  { key: 'updatedAt', labelKey: 'col.updated', visible: true },
+  { key: 'actions', labelKey: 'col.actions', visible: true },
 ];
 
 @Component({
@@ -73,6 +76,7 @@ const ALL_COLUMNS: ColumnDef[] = [
     MatSnackBarModule,
     MatDialogModule,
     MatMenuModule,
+    TranslatePipe,
   ],
   templateUrl: './hiring-process-list.component.html',
   styleUrl: './hiring-process-list.component.scss',
@@ -80,6 +84,8 @@ const ALL_COLUMNS: ColumnDef[] = [
 export class HiringProcessListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+
+  private ts = inject(TranslationService);
 
   // State
   data = signal<HiringProcess[]>([]);
@@ -137,7 +143,7 @@ export class HiringProcessListComponent implements OnInit {
       },
       error: () => {
         this.loading.set(false);
-        this.snack.open('Failed to load records.', 'Close', { duration: 3000 });
+        this.snack.open(this.ts.t('snack.loadFailed'), 'Close', { duration: 3000 });
       },
     });
   }
@@ -187,9 +193,10 @@ export class HiringProcessListComponent implements OnInit {
     this.dialog
       .open(ConfirmDialogComponent, {
         data: {
-          title: 'Delete Application',
-          message: `Delete "${record.companyName}"? This cannot be undone.`,
-          confirmLabel: 'Delete',
+          title: this.ts.t('confirm.deleteTitle'),
+          message: this.ts.t('confirm.deleteMessage', { name: record.companyName }),
+          confirmLabel: this.ts.t('confirm.deleteLabel'),
+          cancelLabel: this.ts.t('dialog.cancel'),
         },
       })
       .afterClosed()
@@ -197,10 +204,10 @@ export class HiringProcessListComponent implements OnInit {
         if (!confirmed) return;
         this.api.delete(record.id).subscribe({
           next: () => {
-            this.snack.open('Record deleted.', 'Close', { duration: 3000 });
+            this.snack.open(this.ts.t('snack.deleted'), 'Close', { duration: 3000 });
             this.load();
           },
-          error: () => this.snack.open('Delete failed.', 'Close', { duration: 3000 }),
+          error: () => this.snack.open(this.ts.t('snack.deleteFailed'), 'Close', { duration: 3000 }),
         });
       });
   }
