@@ -20,6 +20,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { finalize } from 'rxjs';
 import { HiringProcess, HiringProcessForm } from '../../../core/api/hiring-process.model';
 import { HiringProcessApiService } from '../../../core/api/hiring-process-api.service';
 import { TranslatePipe } from '../../../core/i18n/translate.pipe';
@@ -202,7 +203,7 @@ export class HiringProcessFormDialogComponent implements OnInit {
       ? this.api.create(payload)
       : this.api.update(this.data.record!.id, payload);
 
-    req$.subscribe({
+    req$.pipe(finalize(() => this.loading = false)).subscribe({
       next: (saved) => {
         if (this.uploadFile) {
           this.api.uploadFile(saved.id, this.uploadFile).subscribe({
@@ -217,7 +218,6 @@ export class HiringProcessFormDialogComponent implements OnInit {
         }
       },
       error: (err) => {
-        this.loading = false;
         const msg = err?.error?.message ?? this.ts.t('snack.saveFailed');
         this.snack.open(msg, 'Close', { duration: 4000 });
       },
