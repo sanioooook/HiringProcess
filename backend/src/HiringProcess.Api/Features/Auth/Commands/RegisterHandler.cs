@@ -4,6 +4,7 @@ using HiringProcess.Api.Common.Localization;
 using HiringProcess.Api.Features.Auth.Models;
 using HiringProcess.Api.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace HiringProcess.Api.Features.Auth.Commands;
 
@@ -18,19 +19,22 @@ public sealed class RegisterHandler
     private readonly IValidator<RegisterCommand> _validator;
     private readonly ILocalizationService _loc;
     private readonly ICurrentLanguageService _currentLang;
+    private readonly IConfiguration _config;
 
     public RegisterHandler(
         AppDbContext db,
         JwtService jwt,
         IValidator<RegisterCommand> validator,
         ILocalizationService loc,
-        ICurrentLanguageService currentLang)
+        ICurrentLanguageService currentLang,
+        IConfiguration config)
     {
         _db = db;
         _jwt = jwt;
         _validator = validator;
         _loc = loc;
         _currentLang = currentLang;
+        _config = config;
     }
 
     public async Task<Result<RegisterResponse>> HandleAsync(RegisterCommand command, CancellationToken ct = default)
@@ -68,9 +72,19 @@ public sealed class RegisterHandler
         _db.Users.Add(user);
         await _db.SaveChangesAsync(ct);
 
-        // Issue JWT
+        // Issue JWT + refresh token
         var token = _jwt.GenerateToken(user);
+        var refreshTokenValue = _jwt.GenerateRefreshToken();
+        var expireDays = _config.GetValue<int>("Jwt:RefreshExpireDays", 30);
 
-        return new RegisterResponse(user.Id, user.Email, user.DisplayName, token, user.Language);
+        _db.RefreshTokens.Add(new RefreshToken
+        {
+            UserId = user.Id,
+            Token = refreshTokenValue,
+            ExpiresAt = DateTime.UtcNow.AddDays(expireDays)
+        });
+        await _db.SaveChangesAsync(ct);
+
+        return new RegisterResponse(user.Id, user.Email, user.DisplayName, token, user.Language, refreshTokenValue);
     }
 }

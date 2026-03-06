@@ -21,7 +21,7 @@ public sealed class RegisterHandlerTests : IDisposable
         var config = BuildConfig();
         var jwt = new JwtService(config);
         var validator = new RegisterValidator(TestLocalization.Loc, TestLocalization.CurrentLang);
-        _handler = new RegisterHandler(_db, jwt, validator, TestLocalization.Loc, TestLocalization.CurrentLang);
+        _handler = new RegisterHandler(_db, jwt, validator, TestLocalization.Loc, TestLocalization.CurrentLang, config);
     }
 
     [Fact]

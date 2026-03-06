@@ -1,7 +1,8 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, tap } from 'rxjs';
+import { Observable, tap, throwError } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import {
   AuthResponse,
@@ -14,6 +15,7 @@ import { TranslationService, SupportedLanguage } from '../i18n/translation.servi
 
 const TOKEN_KEY = 'hp_token';
 const USER_KEY = 'hp_user';
+const REFRESH_KEY = 'hp_refresh_token';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -52,6 +54,26 @@ export class AuthService {
       .pipe(tap(res => this.persist(res)));
   }
 
+  /** Exchange the stored refresh token for a new access token (+ rotated refresh token). */
+  refresh(): Observable<string> {
+    const rt = localStorage.getItem(REFRESH_KEY);
+    if (!rt) return throwError(() => new Error('no_refresh_token'));
+
+    return this.http
+      .post<{ token: string; refreshToken: string }>(
+        `${environment.apiUrl}/auth/refresh`,
+        { refreshToken: rt },
+      )
+      .pipe(
+        tap(res => {
+          localStorage.setItem(TOKEN_KEY, res.token);
+          this._token.set(res.token);
+          localStorage.setItem(REFRESH_KEY, res.refreshToken);
+        }),
+        map(res => res.token),
+      );
+  }
+
   updateLanguage(lang: SupportedLanguage): void {
     const current = this._user();
     if (!current) return;
@@ -64,6 +86,7 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
+    localStorage.removeItem(REFRESH_KEY);
     this._token.set(null);
     this._user.set(null);
     this.router.navigate(['/login']);
@@ -81,6 +104,9 @@ export class AuthService {
     };
     localStorage.setItem(TOKEN_KEY, res.token);
     localStorage.setItem(USER_KEY, JSON.stringify(user));
+    if (res.refreshToken) {
+      localStorage.setItem(REFRESH_KEY, res.refreshToken);
+    }
     this._token.set(res.token);
     this._user.set(user);
     this.ts.setLanguage(lang);

@@ -34,81 +34,87 @@
 
 <!-- Table -->
 <div class="hiring-table-container">
-  <mat-table [dataSource]="data()" matSort (matSortChange)="onSort($event)"
-             class="hiring-table">
+  <table mat-table [dataSource]="data()" matSort (matSortChange)="onSort($event)"
+         class="hiring-table">
 
     <!-- Company Name -->
     <ng-container matColumnDef="companyName">
-      <mat-header-cell *matHeaderCellDef mat-sort-header="companyName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="companyName">
         {{ 'col.company' | translate }}
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row">
+      </th>
+      <td mat-cell *matCellDef="let row">
         <strong>{{ row.companyName }}</strong>
-      </mat-cell>
+      </td>
     </ng-container>
 
     <!-- Current Stage -->
     <ng-container matColumnDef="currentStage">
-      <mat-header-cell *matHeaderCellDef mat-sort-header="currentStage">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="currentStage">
         {{ 'col.stage' | translate }}
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row">
+      </th>
+      <td mat-cell *matCellDef="let row">
         @if (row.currentStage) {
           <span class="stage-badge">{{ row.currentStage }}</span>
         } @else {
           <span class="muted">—</span>
         }
-      </mat-cell>
+      </td>
     </ng-container>
 
     <!-- Contact Channel -->
     <ng-container matColumnDef="contactChannel">
-      <mat-header-cell *matHeaderCellDef>{{ 'col.channel' | translate }}</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{ row.contactChannel }}</mat-cell>
+      <th mat-header-cell *matHeaderCellDef>{{ 'col.channel' | translate }}</th>
+      <td mat-cell *matCellDef="let row">{{ row.contactChannel }}</td>
     </ng-container>
 
     <!-- Contact Person -->
     <ng-container matColumnDef="contactPerson">
-      <mat-header-cell *matHeaderCellDef>{{ 'col.contactPerson' | translate }}</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{ row.contactPerson || '—' }}</mat-cell>
+      <th mat-header-cell *matHeaderCellDef>{{ 'col.contactPerson' | translate }}</th>
+      <td mat-cell *matCellDef="let row">{{ row.contactPerson || '—' }}</td>
     </ng-container>
 
     <!-- Application Date -->
     <ng-container matColumnDef="applicationDate">
-      <mat-header-cell *matHeaderCellDef mat-sort-header="applicationDate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="applicationDate">
         {{ 'col.applied' | translate }}
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row">{{ row.applicationDate || '—' }}</mat-cell>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.applicationDate ? (row.applicationDate + 'T00:00:00' | date:'dd.MM.yyyy') : '—' }}
+      </td>
     </ng-container>
 
     <!-- First Contact Date -->
     <ng-container matColumnDef="firstContactDate">
-      <mat-header-cell *matHeaderCellDef>{{ 'col.firstContact' | translate }}</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{ row.firstContactDate || '—' }}</mat-cell>
+      <th mat-header-cell *matHeaderCellDef>{{ 'col.firstContact' | translate }}</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.firstContactDate ? (row.firstContactDate + 'T00:00:00' | date:'dd.MM.yyyy') : '—' }}
+      </td>
     </ng-container>
 
     <!-- Last Contact Date -->
     <ng-container matColumnDef="lastContactDate">
-      <mat-header-cell *matHeaderCellDef>{{ 'col.lastContact' | translate }}</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{ row.lastContactDate || '—' }}</mat-cell>
+      <th mat-header-cell *matHeaderCellDef>{{ 'col.lastContact' | translate }}</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.lastContactDate ? (row.lastContactDate + 'T00:00:00' | date:'dd.MM.yyyy') : '—' }}
+      </td>
     </ng-container>
 
     <!-- Salary Range -->
     <ng-container matColumnDef="salaryRange">
-      <mat-header-cell *matHeaderCellDef>{{ 'col.salary' | translate }}</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{ row.salaryRange || '—' }}</mat-cell>
+      <th mat-header-cell *matHeaderCellDef>{{ 'col.salary' | translate }}</th>
+      <td mat-cell *matCellDef="let row">{{ row.salaryRange || '—' }}</td>
     </ng-container>
 
     <!-- Applied With -->
     <ng-container matColumnDef="appliedWith">
-      <mat-header-cell *matHeaderCellDef>{{ 'col.appliedWith' | translate }}</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{ row.appliedWith || '—' }}</mat-cell>
+      <th mat-header-cell *matHeaderCellDef>{{ 'col.appliedWith' | translate }}</th>
+      <td mat-cell *matCellDef="let row">{{ row.appliedWith || '—' }}</td>
     </ng-container>
 
     <!-- Hiring Stages -->
     <ng-container matColumnDef="hiringStages">
-      <mat-header-cell *matHeaderCellDef>{{ 'col.stages' | translate }}</mat-header-cell>
-      <mat-cell *matCellDef="let row">
+      <th mat-header-cell *matHeaderCellDef>{{ 'col.stages' | translate }}</th>
+      <td mat-cell *matCellDef="let row">
         <div class="mini-chips">
           @for (s of row.hiringStages.slice(0,3); track s) {
             <span class="mini-chip">{{ s }}</span>
@@ -117,23 +123,23 @@
             <span class="mini-chip muted">+{{ row.hiringStages.length - 3 }}</span>
           }
         </div>
-      </mat-cell>
+      </td>
     </ng-container>
 
     <!-- Updated At -->
     <ng-container matColumnDef="updatedAt">
-      <mat-header-cell *matHeaderCellDef mat-sort-header="updatedAt">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="updatedAt">
         {{ 'col.updated' | translate }}
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row">
-        {{ row.updatedAt | date:'dd MMM yyyy' }}
-      </mat-cell>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.updatedAt | date:'dd.MM.yyyy' }}
+      </td>
     </ng-container>
 
     <!-- Actions -->
     <ng-container matColumnDef="actions" stickyEnd>
-      <mat-header-cell *matHeaderCellDef>{{ 'col.actions' | translate }}</mat-header-cell>
-      <mat-cell *matCellDef="let row">
+      <th mat-header-cell *matHeaderCellDef>{{ 'col.actions' | translate }}</th>
+      <td mat-cell *matCellDef="let row">
         <button mat-icon-button (click)="openEdit(row)"
                 [matTooltip]="'action.edit' | translate">
           <mat-icon>edit</mat-icon>
@@ -148,16 +154,16 @@
                 [matTooltip]="'action.delete' | translate">
           <mat-icon>delete</mat-icon>
         </button>
-      </mat-cell>
+      </td>
     </ng-container>
 
-    <mat-header-row *matHeaderRowDef="displayedColumns(); sticky: true" />
-    <mat-row *matRowDef="let row; columns: displayedColumns();"
-             class="table-row" />
+    <tr mat-header-row *matHeaderRowDef="displayedColumns(); sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns();"
+        class="table-row"></tr>
 
-    <!-- Empty state -->
-    <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell empty-cell" [attr.colspan]="displayedColumns().length">
+    <!-- Empty state — colspan works correctly in native <table> -->
+    <tr class="mat-mdc-no-data-row" *matNoDataRow>
+      <td class="empty-cell" [attr.colspan]="displayedColumns().length">
         <div class="empty-state">
           <mat-icon>work_outline</mat-icon>
           <p>{{ 'list.noApplications' | translate }}</p>
@@ -168,7 +174,7 @@
       </td>
     </tr>
 
-  </mat-table>
+  </table>
 </div>
 
 <!-- Paginator -->

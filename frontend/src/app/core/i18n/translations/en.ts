@@ -149,4 +149,16 @@ export const en: Record<string, string> = {
   'snack.saveFailed': 'Save failed. Please try again.',
   'snack.settingsSaved': 'Language saved.',
   'snack.settingsFailed': 'Failed to save settings.',
+  'snack.sessionExpired': 'Session expired. Please sign in again.',
+
+  // Markdown toolbar
+  'md.bold': 'Bold',
+  'md.italic': 'Italic',
+  'md.strikethrough': 'Strikethrough',
+  'md.heading': 'Heading',
+  'md.list': 'List',
+  'md.quote': 'Quote',
+  'md.link': 'Link',
+  'md.edit': 'Edit',
+  'md.preview': 'Preview',
 };

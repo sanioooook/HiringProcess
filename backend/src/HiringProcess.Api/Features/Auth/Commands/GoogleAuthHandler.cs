@@ -4,6 +4,7 @@ using HiringProcess.Api.Common.Localization;
 using HiringProcess.Api.Features.Auth.Models;
 using HiringProcess.Api.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace HiringProcess.Api.Features.Auth.Commands;
 
@@ -90,9 +91,19 @@ public sealed class GoogleAuthHandler
 
         await _db.SaveChangesAsync(ct);
 
-        // Issue JWT
+        // Issue JWT + refresh token
         var token = _jwt.GenerateToken(user);
+        var refreshTokenValue = _jwt.GenerateRefreshToken();
+        var expireDays = _config.GetValue<int>("Jwt:RefreshExpireDays", 30);
 
-        return new GoogleAuthResponse(user.Id, user.Email, user.DisplayName, token, isNewUser, user.Language);
+        _db.RefreshTokens.Add(new RefreshToken
+        {
+            UserId = user.Id,
+            Token = refreshTokenValue,
+            ExpiresAt = DateTime.UtcNow.AddDays(expireDays)
+        });
+        await _db.SaveChangesAsync(ct);
+
+        return new GoogleAuthResponse(user.Id, user.Email, user.DisplayName, token, isNewUser, user.Language, refreshTokenValue);
     }
 }

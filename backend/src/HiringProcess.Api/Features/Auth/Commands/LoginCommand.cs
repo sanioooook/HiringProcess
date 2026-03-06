@@ -13,5 +13,6 @@ public sealed record LoginResponse(
     string Email,
     string DisplayName,
     string Token,
-    string Language
+    string Language,
+    string RefreshToken
 );

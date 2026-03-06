@@ -52,4 +52,8 @@ export class HiringProcessApiService {
   getFileDownloadUrl(id: string): string {
     return `${this.base}/${id}/file`;
   }
+
+  downloadFile(id: string): Observable<Blob> {
+    return this.http.get(`${this.base}/${id}/file`, { responseType: 'blob' });
+  }
 }

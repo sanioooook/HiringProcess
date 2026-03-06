@@ -53,6 +53,7 @@ builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<RegisterHandler>();
 builder.Services.AddScoped<LoginHandler>();
 builder.Services.AddScoped<GoogleAuthHandler>();
+builder.Services.AddScoped<RefreshTokenHandler>();
 
 // HiringProcesses handlers
 builder.Services.AddScoped<GetHiringProcessesHandler>();

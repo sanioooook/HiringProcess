@@ -149,4 +149,16 @@ export const ru: Record<string, string> = {
   'snack.saveFailed': 'Ошибка сохранения. Попробуйте ещё раз.',
   'snack.settingsSaved': 'Язык сохранён.',
   'snack.settingsFailed': 'Не удалось сохранить настройки.',
+  'snack.sessionExpired': 'Сессия истекла. Пожалуйста, войдите снова.',
+
+  // Markdown toolbar
+  'md.bold': 'Жирный',
+  'md.italic': 'Курсив',
+  'md.strikethrough': 'Зачёркнутый',
+  'md.heading': 'Заголовок',
+  'md.list': 'Список',
+  'md.quote': 'Цитата',
+  'md.link': 'Ссылка',
+  'md.edit': 'Редактировать',
+  'md.preview': 'Просмотр',
 };

@@ -17,8 +17,20 @@
   flex: 0 1 320px;
 }
 
+.hiring-table-container {
+  overflow-x: auto;
+  padding: 0 24px;
+}
+
 .hiring-table {
   width: 100%;
+  min-width: 640px;
+}
+
+.mat-column-actions {
+  white-space: nowrap;
+  width: 1px;
+  text-align: right;
 }
 
 .stage-badge {
@@ -50,12 +62,13 @@
 }
 
 .empty-cell {
-  padding: 48px 0 !important;
+  height: 300px;
   text-align: center;
+  vertical-align: middle;
 }
 
 .empty-state {
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
@@ -75,4 +88,5 @@
 
 mat-paginator {
   border-top: 1px solid var(--mat-sys-outline-variant);
+  margin: 0 24px;
 }

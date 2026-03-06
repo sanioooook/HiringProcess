@@ -63,28 +63,32 @@
 
           <mat-form-field appearance="outline">
             <mat-label>{{ 'field.firstContactDate' | translate }}</mat-label>
-            <input matInput [matDatepicker]="dp1" formControlName="firstContactDate" />
+            <input matInput [matDatepicker]="dp1" formControlName="firstContactDate"
+                   (click)="dp1.open()" readonly />
             <mat-datepicker-toggle matIconSuffix [for]="dp1" />
             <mat-datepicker #dp1 />
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>{{ 'field.lastContactDate' | translate }}</mat-label>
-            <input matInput [matDatepicker]="dp2" formControlName="lastContactDate" />
+            <input matInput [matDatepicker]="dp2" formControlName="lastContactDate"
+                   (click)="dp2.open()" readonly />
             <mat-datepicker-toggle matIconSuffix [for]="dp2" />
             <mat-datepicker #dp2 />
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>{{ 'field.vacancyPublished' | translate }}</mat-label>
-            <input matInput [matDatepicker]="dp3" formControlName="vacancyPublishedDate" />
+            <input matInput [matDatepicker]="dp3" formControlName="vacancyPublishedDate"
+                   (click)="dp3.open()" readonly />
             <mat-datepicker-toggle matIconSuffix [for]="dp3" />
             <mat-datepicker #dp3 />
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>{{ 'field.applicationDate' | translate }}</mat-label>
-            <input matInput [matDatepicker]="dp4" formControlName="applicationDate" />
+            <input matInput [matDatepicker]="dp4" formControlName="applicationDate"
+                   (click)="dp4.open()" readonly />
             <mat-datepicker-toggle matIconSuffix [for]="dp4" />
             <mat-datepicker #dp4 />
           </mat-form-field>
@@ -179,13 +183,56 @@
       <mat-tab [label]="'dialog.tab.notes' | translate">
         <div class="tab-body">
 
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>{{ 'field.coverLetter' | translate }}</mat-label>
-            <textarea matInput formControlName="coverLetter"
-                      rows="6"
-                      [placeholder]="'field.coverLetterPlaceholder' | translate"></textarea>
-          </mat-form-field>
+          <!-- Cover Letter with Markdown toolbar -->
+          <div class="md-editor-block">
+            <div class="md-toolbar">
+              <button type="button" mat-icon-button [matTooltip]="'md.bold' | translate"
+                      (click)="wrapText(clInput, 'coverLetter', '**')">
+                <mat-icon>format_bold</mat-icon>
+              </button>
+              <button type="button" mat-icon-button [matTooltip]="'md.italic' | translate"
+                      (click)="wrapText(clInput, 'coverLetter', '*')">
+                <mat-icon>format_italic</mat-icon>
+              </button>
+              <button type="button" mat-icon-button [matTooltip]="'md.strikethrough' | translate"
+                      (click)="wrapText(clInput, 'coverLetter', '~~')">
+                <mat-icon>format_strikethrough</mat-icon>
+              </button>
+              <button type="button" mat-icon-button [matTooltip]="'md.heading' | translate"
+                      (click)="insertLinePrefix(clInput, 'coverLetter', '## ')">
+                <mat-icon>title</mat-icon>
+              </button>
+              <button type="button" mat-icon-button [matTooltip]="'md.list' | translate"
+                      (click)="insertLinePrefix(clInput, 'coverLetter', '- ')">
+                <mat-icon>format_list_bulleted</mat-icon>
+              </button>
+              <button type="button" mat-icon-button [matTooltip]="'md.quote' | translate"
+                      (click)="insertLinePrefix(clInput, 'coverLetter', '> ')">
+                <mat-icon>format_quote</mat-icon>
+              </button>
+              <button type="button" mat-icon-button [matTooltip]="'md.link' | translate"
+                      (click)="insertLink(clInput, 'coverLetter')">
+                <mat-icon>link</mat-icon>
+              </button>
+              <span class="flex-spacer"></span>
+              <button type="button" mat-button (click)="coverLetterPreview = !coverLetterPreview">
+                <mat-icon>{{ coverLetterPreview ? 'edit' : 'visibility' }}</mat-icon>
+                {{ (coverLetterPreview ? 'md.edit' : 'md.preview') | translate }}
+              </button>
+            </div>
 
+            <mat-form-field appearance="outline" class="full-width no-top-radius" [hidden]="coverLetterPreview">
+              <mat-label>{{ 'field.coverLetter' | translate }}</mat-label>
+              <textarea #clInput matInput formControlName="coverLetter"
+                        rows="8"
+                        [placeholder]="'field.coverLetterPlaceholder' | translate"></textarea>
+            </mat-form-field>
+            <div class="md-preview" [hidden]="!coverLetterPreview">
+              <markdown [data]="form.value['coverLetter'] || ''"></markdown>
+            </div>
+          </div>
+
+          <!-- Vacancy Text (plain — no markdown toolbar) -->
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>{{ 'field.vacancyText' | translate }}</mat-label>
             <textarea matInput formControlName="vacancyText"
@@ -193,12 +240,54 @@
                       [placeholder]="'field.vacancyTextPlaceholder' | translate"></textarea>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>{{ 'field.notes' | translate }}</mat-label>
-            <textarea matInput formControlName="notes"
-                      rows="5"
-                      [placeholder]="'field.notesPlaceholder' | translate"></textarea>
-          </mat-form-field>
+          <!-- Notes with Markdown toolbar -->
+          <div class="md-editor-block">
+            <div class="md-toolbar">
+              <button type="button" mat-icon-button [matTooltip]="'md.bold' | translate"
+                      (click)="wrapText(notesInput, 'notes', '**')">
+                <mat-icon>format_bold</mat-icon>
+              </button>
+              <button type="button" mat-icon-button [matTooltip]="'md.italic' | translate"
+                      (click)="wrapText(notesInput, 'notes', '*')">
+                <mat-icon>format_italic</mat-icon>
+              </button>
+              <button type="button" mat-icon-button [matTooltip]="'md.strikethrough' | translate"
+                      (click)="wrapText(notesInput, 'notes', '~~')">
+                <mat-icon>format_strikethrough</mat-icon>
+              </button>
+              <button type="button" mat-icon-button [matTooltip]="'md.heading' | translate"
+                      (click)="insertLinePrefix(notesInput, 'notes', '## ')">
+                <mat-icon>title</mat-icon>
+              </button>
+              <button type="button" mat-icon-button [matTooltip]="'md.list' | translate"
+                      (click)="insertLinePrefix(notesInput, 'notes', '- ')">
+                <mat-icon>format_list_bulleted</mat-icon>
+              </button>
+              <button type="button" mat-icon-button [matTooltip]="'md.quote' | translate"
+                      (click)="insertLinePrefix(notesInput, 'notes', '> ')">
+                <mat-icon>format_quote</mat-icon>
+              </button>
+              <button type="button" mat-icon-button [matTooltip]="'md.link' | translate"
+                      (click)="insertLink(notesInput, 'notes')">
+                <mat-icon>link</mat-icon>
+              </button>
+              <span class="flex-spacer"></span>
+              <button type="button" mat-button (click)="notesPreview = !notesPreview">
+                <mat-icon>{{ notesPreview ? 'edit' : 'visibility' }}</mat-icon>
+                {{ (notesPreview ? 'md.edit' : 'md.preview') | translate }}
+              </button>
+            </div>
+
+            <mat-form-field appearance="outline" class="full-width no-top-radius" [hidden]="notesPreview">
+              <mat-label>{{ 'field.notes' | translate }}</mat-label>
+              <textarea #notesInput matInput formControlName="notes"
+                        rows="8"
+                        [placeholder]="'field.notesPlaceholder' | translate"></textarea>
+            </mat-form-field>
+            <div class="md-preview" [hidden]="!notesPreview">
+              <markdown [data]="form.value['notes'] || ''"></markdown>
+            </div>
+          </div>
 
         </div>
       </mat-tab>
@@ -211,9 +300,10 @@
             <p class="file-info">
               <mat-icon>attach_file</mat-icon>
               {{ 'file.hasAttached' | translate }}
-              <a mat-button color="primary"
-                 [href]="data.record ? '/api/hiring-processes/' + data.record.id + '/file' : ''"
-                 target="_blank" download>{{ 'file.download' | translate }}</a>
+              <button mat-button color="primary" type="button"
+                      (click)="downloadExistingFile()">
+                {{ 'file.download' | translate }}
+              </button>
             </p>
           }
 

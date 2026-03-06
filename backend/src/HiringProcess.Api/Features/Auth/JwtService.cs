@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using HiringProcess.Api.Features.Auth.Models;
 using Microsoft.IdentityModel.Tokens;
@@ -43,5 +44,15 @@ public sealed class JwtService
         );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    /// <summary>
+    /// Generates a cryptographically secure 64-char hex refresh token.
+    /// </summary>
+    public string GenerateRefreshToken()
+    {
+        var bytes = new byte[32];
+        RandomNumberGenerator.Fill(bytes);
+        return Convert.ToHexString(bytes).ToLowerInvariant();
     }
 }

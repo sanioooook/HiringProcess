@@ -15,5 +15,6 @@ public sealed record GoogleAuthResponse(
     string DisplayName,
     string Token,
     bool IsNewUser,
-    string Language
+    string Language,
+    string RefreshToken
 );

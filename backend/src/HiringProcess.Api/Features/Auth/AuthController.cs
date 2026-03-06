@@ -1,5 +1,6 @@
 using HiringProcess.Api.Common.Extensions;
 using HiringProcess.Api.Features.Auth.Commands;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HiringProcess.Api.Features.Auth;
@@ -15,15 +16,18 @@ public sealed class AuthController : ControllerBase
     private readonly RegisterHandler _registerHandler;
     private readonly LoginHandler _loginHandler;
     private readonly GoogleAuthHandler _googleAuthHandler;
+    private readonly RefreshTokenHandler _refreshTokenHandler;
 
     public AuthController(
         RegisterHandler registerHandler,
         LoginHandler loginHandler,
-        GoogleAuthHandler googleAuthHandler)
+        GoogleAuthHandler googleAuthHandler,
+        RefreshTokenHandler refreshTokenHandler)
     {
         _registerHandler = registerHandler;
         _loginHandler = loginHandler;
         _googleAuthHandler = googleAuthHandler;
+        _refreshTokenHandler = refreshTokenHandler;
     }
 
     /// <summary>Register a new user with email and password.</summary>
@@ -53,6 +57,19 @@ public sealed class AuthController : ControllerBase
         CancellationToken ct)
     {
         var result = await _loginHandler.HandleAsync(command, ct);
+        return result.ToActionResult();
+    }
+
+    /// <summary>Exchange a refresh token for a new access token (token rotation).</summary>
+    [HttpPost("refresh")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(RefreshTokenResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> Refresh(
+        [FromBody] RefreshTokenCommand command,
+        CancellationToken ct)
+    {
+        var result = await _refreshTokenHandler.HandleAsync(command, ct);
         return result.ToActionResult();
     }
 

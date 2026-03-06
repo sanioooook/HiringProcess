@@ -17,5 +17,6 @@ public sealed record RegisterResponse(
     string Email,
     string DisplayName,
     string Token,
-    string Language
+    string Language,
+    string RefreshToken
 );

@@ -14,6 +14,7 @@ public sealed class AppDbContext : DbContext
 
     public DbSet<AppUser> Users => Set<AppUser>();
     public DbSet<HiringProcessEntity> HiringProcesses => Set<HiringProcessEntity>();
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -21,6 +22,7 @@ public sealed class AppDbContext : DbContext
 
         ConfigureUsers(modelBuilder);
         ConfigureHiringProcesses(modelBuilder);
+        ConfigureRefreshTokens(modelBuilder);
     }
 
     private static void ConfigureUsers(ModelBuilder modelBuilder)
@@ -112,6 +114,27 @@ public sealed class AppDbContext : DbContext
 
             entity.Property(h => h.CreatedAt).IsRequired();
             entity.Property(h => h.UpdatedAt).IsRequired();
+        });
+    }
+
+    private static void ConfigureRefreshTokens(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<RefreshToken>(entity =>
+        {
+            entity.ToTable("refresh_tokens");
+            entity.HasKey(r => r.Id);
+
+            entity.Property(r => r.Id).ValueGeneratedNever();
+
+            entity.Property(r => r.Token)
+                  .IsRequired()
+                  .HasMaxLength(128);
+
+            entity.HasIndex(r => r.Token).IsUnique();
+            entity.HasIndex(r => r.UserId);
+
+            entity.Property(r => r.ExpiresAt).IsRequired();
+            entity.Property(r => r.CreatedAt).IsRequired();
         });
     }
 }

@@ -4,6 +4,7 @@ export interface AuthResponse {
   displayName: string;
   token: string;
   language: string;
+  refreshToken?: string;
 }
 
 export interface RegisterRequest {

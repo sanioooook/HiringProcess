@@ -149,4 +149,16 @@ export const uk: Record<string, string> = {
   'snack.saveFailed': 'Помилка збереження. Спробуйте ще раз.',
   'snack.settingsSaved': 'Мову збережено.',
   'snack.settingsFailed': 'Не вдалося зберегти налаштування.',
+  'snack.sessionExpired': 'Сесія закінчилася. Будь ласка, увійдіть знову.',
+
+  // Markdown toolbar
+  'md.bold': 'Жирний',
+  'md.italic': 'Курсив',
+  'md.strikethrough': 'Закреслений',
+  'md.heading': 'Заголовок',
+  'md.list': 'Список',
+  'md.quote': 'Цитата',
+  'md.link': 'Посилання',
+  'md.edit': 'Редагувати',
+  'md.preview': 'Перегляд',
 };

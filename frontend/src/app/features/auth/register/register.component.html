@@ -57,9 +57,13 @@
           }
         </mat-form-field>
 
+        @if (store.error()) {
+          <mat-error class="server-error">{{ store.error() }}</mat-error>
+        }
+
         <button mat-flat-button color="primary" type="submit"
-                class="full-width submit-btn" [disabled]="loading">
-          @if (loading) {
+                class="full-width submit-btn" [disabled]="store.loading()">
+          @if (store.loading()) {
             <mat-spinner diameter="20" />
           } @else {
             {{ 'auth.register.submit' | translate }}

@@ -21,7 +21,7 @@ public sealed class LoginHandlerTests : IDisposable
         var config = BuildConfig();
         var jwt = new JwtService(config);
         var validator = new LoginValidator(TestLocalization.Loc, TestLocalization.CurrentLang);
-        _handler = new LoginHandler(_db, jwt, validator, TestLocalization.Loc, TestLocalization.CurrentLang);
+        _handler = new LoginHandler(_db, jwt, validator, TestLocalization.Loc, TestLocalization.CurrentLang, config);
     }
 
     [Fact]

@@ -1,6 +1,7 @@
 using FluentValidation;
 using HiringProcess.Api.Common;
 using HiringProcess.Api.Common.Localization;
+using HiringProcess.Api.Features.Auth.Models;
 using HiringProcess.Api.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,19 +18,22 @@ public sealed class LoginHandler
     private readonly IValidator<LoginCommand> _validator;
     private readonly ILocalizationService _loc;
     private readonly ICurrentLanguageService _currentLang;
+    private readonly IConfiguration _config;
 
     public LoginHandler(
         AppDbContext db,
         JwtService jwt,
         IValidator<LoginCommand> validator,
         ILocalizationService loc,
-        ICurrentLanguageService currentLang)
+        ICurrentLanguageService currentLang,
+        IConfiguration config)
     {
         _db = db;
         _jwt = jwt;
         _validator = validator;
         _loc = loc;
         _currentLang = currentLang;
+        _config = config;
     }
 
     public async Task<Result<LoginResponse>> HandleAsync(LoginCommand command, CancellationToken ct = default)
@@ -57,9 +61,19 @@ public sealed class LoginHandler
         if (!BCrypt.Net.BCrypt.Verify(command.Password, user.PasswordHash))
             return invalidCreds;
 
-        // Issue JWT
+        // Issue JWT + refresh token
         var token = _jwt.GenerateToken(user);
+        var refreshTokenValue = _jwt.GenerateRefreshToken();
+        var expireDays = _config.GetValue<int>("Jwt:RefreshExpireDays", 30);
 
-        return new LoginResponse(user.Id, user.Email, user.DisplayName, token, user.Language);
+        _db.RefreshTokens.Add(new RefreshToken
+        {
+            UserId = user.Id,
+            Token = refreshTokenValue,
+            ExpiresAt = DateTime.UtcNow.AddDays(expireDays)
+        });
+        await _db.SaveChangesAsync(ct);
+
+        return new LoginResponse(user.Id, user.Email, user.DisplayName, token, user.Language, refreshTokenValue);
     }
 }

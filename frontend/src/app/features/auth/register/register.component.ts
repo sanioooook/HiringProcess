@@ -7,15 +7,14 @@ import {
   AbstractControl,
   ValidationErrors,
 } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { AuthService } from '../../../core/auth/auth.service';
+import { AuthStore } from '../../../core/auth/auth.store';
 import { TranslatePipe } from '../../../core/i18n/translate.pipe';
 
 function passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
@@ -37,7 +36,6 @@ function passwordMatchValidator(control: AbstractControl): ValidationErrors | nu
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    MatSnackBarModule,
     TranslatePipe,
   ],
   templateUrl: './register.component.html',
@@ -45,9 +43,7 @@ function passwordMatchValidator(control: AbstractControl): ValidationErrors | nu
 })
 export class RegisterComponent {
   private fb = inject(FormBuilder);
-  private auth = inject(AuthService);
-  private router = inject(Router);
-  private snack = inject(MatSnackBar);
+  protected store = inject(AuthStore);
 
   form = this.fb.nonNullable.group(
     {
@@ -60,21 +56,11 @@ export class RegisterComponent {
     { validators: passwordMatchValidator },
   );
 
-  loading = false;
   hidePass = true;
 
   submit(): void {
     if (this.form.invalid) return;
-    this.loading = true;
-
     const { email, displayName, password } = this.form.getRawValue();
-    this.auth.register({ email, displayName, password }).subscribe({
-      next: () => this.router.navigate(['/app']),
-      error: (err) => {
-        this.loading = false;
-        const msg = err?.error?.message ?? 'Registration failed. Try again.';
-        this.snack.open(msg, 'Close', { duration: 4000 });
-      },
-    });
+    this.store.register({ email, displayName, password });
   }
 }

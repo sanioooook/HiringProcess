@@ -13,13 +13,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MarkdownModule } from 'ngx-markdown';
 import { finalize } from 'rxjs';
 import { HiringProcess, HiringProcessForm } from '../../../core/api/hiring-process.model';
 import { HiringProcessApiService } from '../../../core/api/hiring-process-api.service';
@@ -51,13 +51,13 @@ const STAGE_PRESETS = [
     MatButtonModule,
     MatIconModule,
     MatDatepickerModule,
-    MatNativeDateModule,
     MatSelectModule,
     MatChipsModule,
     MatProgressSpinnerModule,
     MatTabsModule,
     MatSnackBarModule,
     MatTooltipModule,
+    MarkdownModule,
     TranslatePipe,
   ],
   templateUrl: './hiring-process-form-dialog.component.html',
@@ -74,6 +74,10 @@ export class HiringProcessFormDialogComponent implements OnInit {
 
   loading = false;
   uploadFile: File | null = null;
+
+  // Markdown preview state
+  coverLetterPreview = false;
+  notesPreview = false;
 
   private fb = inject(FormBuilder);
   private api = inject(HiringProcessApiService);
@@ -118,10 +122,10 @@ export class HiringProcessFormDialogComponent implements OnInit {
         appliedLink: r.appliedLink ?? '',
         vacancyLink: r.vacancyLink ?? '',
         currentStage: r.currentStage ?? '',
-        firstContactDate: r.firstContactDate ? new Date(r.firstContactDate) : null,
-        lastContactDate: r.lastContactDate ? new Date(r.lastContactDate) : null,
-        vacancyPublishedDate: r.vacancyPublishedDate ? new Date(r.vacancyPublishedDate) : null,
-        applicationDate: r.applicationDate ? new Date(r.applicationDate) : null,
+        firstContactDate: r.firstContactDate ? new Date(r.firstContactDate + 'T00:00:00') : null,
+        lastContactDate: r.lastContactDate ? new Date(r.lastContactDate + 'T00:00:00') : null,
+        vacancyPublishedDate: r.vacancyPublishedDate ? new Date(r.vacancyPublishedDate + 'T00:00:00') : null,
+        applicationDate: r.applicationDate ? new Date(r.applicationDate + 'T00:00:00') : null,
         coverLetter: r.coverLetter ?? '',
         vacancyText: r.vacancyText ?? '',
         notes: r.notes ?? '',
@@ -162,11 +166,73 @@ export class HiringProcessFormDialogComponent implements OnInit {
     }
   }
 
+  downloadExistingFile(): void {
+    if (!this.data.record) return;
+    this.api.downloadFile(this.data.record.id).subscribe(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `vacancy-${this.data.record!.companyName}`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  }
+
+  // Markdown toolbar helpers
+
+  wrapText(el: HTMLTextAreaElement, ctrlName: string, marker: string): void {
+    const ctrl = this.form.get(ctrlName)!;
+    const text: string = ctrl.value ?? '';
+    const start = el.selectionStart;
+    const end = el.selectionEnd;
+    const selected = text.substring(start, end) || 'text';
+    const newText = text.substring(0, start) + `${marker}${selected}${marker}` + text.substring(end);
+    ctrl.setValue(newText);
+    setTimeout(() => {
+      el.setSelectionRange(start + marker.length, start + marker.length + selected.length);
+      el.focus();
+    });
+  }
+
+  insertLinePrefix(el: HTMLTextAreaElement, ctrlName: string, prefix: string): void {
+    const ctrl = this.form.get(ctrlName)!;
+    const text: string = ctrl.value ?? '';
+    const pos = el.selectionStart;
+    const lineStart = text.lastIndexOf('\n', pos - 1) + 1;
+    const newText = text.substring(0, lineStart) + prefix + text.substring(lineStart);
+    ctrl.setValue(newText);
+    setTimeout(() => {
+      const newPos = lineStart + prefix.length;
+      el.setSelectionRange(newPos, newPos);
+      el.focus();
+    });
+  }
+
+  insertLink(el: HTMLTextAreaElement, ctrlName: string): void {
+    const ctrl = this.form.get(ctrlName)!;
+    const text: string = ctrl.value ?? '';
+    const start = el.selectionStart;
+    const end = el.selectionEnd;
+    const selected = text.substring(start, end) || 'link text';
+    const insertion = `[${selected}](url)`;
+    const newText = text.substring(0, start) + insertion + text.substring(end);
+    ctrl.setValue(newText);
+    setTimeout(() => {
+      // Select the 'url' part for easy replacement
+      const urlStart = start + selected.length + 3;
+      el.setSelectionRange(urlStart, urlStart + 3);
+      el.focus();
+    });
+  }
+
   // Helpers
 
   private formatDate(date: Date | null | undefined): string | null {
     if (!date) return null;
-    return date.toISOString().substring(0, 10);
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
   }
 
   private buildPayload(): HiringProcessForm {

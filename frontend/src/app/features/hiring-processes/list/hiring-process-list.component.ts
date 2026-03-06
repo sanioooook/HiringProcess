@@ -24,7 +24,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { HiringProcess, HiringProcessQuery } from '../../../core/api/hiring-process.model';
+import { HiringProcess } from '../../../core/api/hiring-process.model';
 import { HiringProcessApiService } from '../../../core/api/hiring-process-api.service';
 import {
   HiringProcessFormDialogComponent,
@@ -39,6 +39,7 @@ import {
 import { AuthService } from '../../../core/auth/auth.service';
 import { TranslatePipe } from '../../../core/i18n/translate.pipe';
 import { TranslationService } from '../../../core/i18n/translation.service';
+import { HiringProcessStore } from '../hiring-process.store';
 
 const COLUMNS_KEY = 'hp_columns';
 
@@ -86,15 +87,19 @@ export class HiringProcessListComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   private ts = inject(TranslationService);
+  private snack = inject(MatSnackBar);
+  private api = inject(HiringProcessApiService);
+  protected hpStore = inject(HiringProcessStore);
 
-  // State
-  data = signal<HiringProcess[]>([]);
-  totalCount = signal(0);
-  loading = signal(false);
+  // Signals from store
+  data = this.hpStore.items;
+  totalCount = this.hpStore.total;
+  loading = this.hpStore.loading;
+
+  // Local UI state
   columns = signal<ColumnDef[]>(this.loadColumns());
-
   searchTerm = '';
-  page = 0; // 0-based for MatPaginator, +1 when calling API
+  page = 0;
   pageSize = 20;
   sortBy = 'updatedAt';
   sortDirection: 'asc' | 'desc' = 'desc';
@@ -106,12 +111,9 @@ export class HiringProcessListComponent implements OnInit {
   private readonly search$ = new Subject<string>();
 
   constructor(
-    private api: HiringProcessApiService,
     private dialog: MatDialog,
-    private snack: MatSnackBar,
     public auth: AuthService,
   ) {
-    // Debounce search input
     this.search$
       .pipe(debounceTime(350), distinctUntilChanged(), takeUntilDestroyed())
       .subscribe(term => {
@@ -123,32 +125,15 @@ export class HiringProcessListComponent implements OnInit {
 
   ngOnInit(): void { this.load(); }
 
-  // Data loading
-
   load(): void {
-    this.loading.set(true);
-    const query: HiringProcessQuery = {
+    this.hpStore.load({
       page: this.page + 1,
       pageSize: this.pageSize,
       search: this.searchTerm || undefined,
       sortBy: this.sortBy,
       sortDirection: this.sortDirection,
-    };
-
-    this.api.getAll(query).subscribe({
-      next: (res) => {
-        this.data.set(res.items);
-        this.totalCount.set(res.totalCount);
-        this.loading.set(false);
-      },
-      error: () => {
-        this.loading.set(false);
-        this.snack.open(this.ts.t('snack.loadFailed'), 'Close', { duration: 3000 });
-      },
     });
   }
-
-  // Pagination & sort
 
   onPage(event: PageEvent): void {
     this.page = event.pageIndex;
@@ -164,8 +149,6 @@ export class HiringProcessListComponent implements OnInit {
   }
 
   onSearch(term: string): void { this.search$.next(term); }
-
-  // CRUD actions
 
   openCreate(): void {
     this.dialog
@@ -200,23 +183,24 @@ export class HiringProcessListComponent implements OnInit {
         },
       })
       .afterClosed()
-      .subscribe(confirmed => {
+      .subscribe(async confirmed => {
         if (!confirmed) return;
-        this.api.delete(record.id).subscribe({
-          next: () => {
-            this.snack.open(this.ts.t('snack.deleted'), 'Close', { duration: 3000 });
-            this.load();
-          },
-          error: () => this.snack.open(this.ts.t('snack.deleteFailed'), 'Close', { duration: 3000 }),
-        });
+        const ok = await this.hpStore.delete(record.id);
+        const msg = ok ? this.ts.t('snack.deleted') : this.ts.t('snack.deleteFailed');
+        this.snack.open(msg, 'Close', { duration: 3000 });
       });
   }
 
   downloadFile(record: HiringProcess): void {
-    window.open(this.api.getFileDownloadUrl(record.id), '_blank');
+    this.api.downloadFile(record.id).subscribe(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `vacancy-${record.companyName}`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
   }
-
-  // Column management
 
   openColumnSelector(): void {
     this.dialog
@@ -231,8 +215,6 @@ export class HiringProcessListComponent implements OnInit {
         }
       });
   }
-
-  // Persistence (localStorage)
 
   private loadColumns(): ColumnDef[] {
     try {
