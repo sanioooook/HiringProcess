@@ -1,0 +1,33 @@
+name: Cleanup old packages
+
+on:
+  schedule:
+    - cron: '0 3 * * *' # every night at 3:00 UTC
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+
+    steps:
+      - name: Delete old backend images
+        uses: actions/delete-package-versions@v5
+        with:
+          package-name: 'hiringprocess-backend'
+          package-type: 'container'
+          min-versions-to-keep: 3
+          delete-only-untagged-versions: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete old frontend images
+        uses: actions/delete-package-versions@v5
+        with:
+          package-name: 'hiringprocess-frontend'
+          package-type: 'container'
+          min-versions-to-keep: 3
+          delete-only-untagged-versions: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
