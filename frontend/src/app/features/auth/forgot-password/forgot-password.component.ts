@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -28,11 +28,10 @@ import { TranslatePipe } from '../../../core/i18n/translate.pipe';
   styleUrl: './forgot-password.component.scss',
 })
 export class ForgotPasswordComponent {
-  private fb = inject(FormBuilder);
   private auth = inject(AuthService);
 
-  form = this.fb.nonNullable.group({
-    email: ['', [Validators.required, Validators.email]],
+  form = new FormGroup({
+    email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
   });
 
   loading = signal(false);

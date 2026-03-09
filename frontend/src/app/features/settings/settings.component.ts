@@ -1,5 +1,5 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { FormsModule, ReactiveFormsModule, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatRadioModule } from '@angular/material/radio';
@@ -44,7 +44,6 @@ function passwordMatch(control: AbstractControl): ValidationErrors | null {
 })
 export class SettingsComponent implements OnInit {
   private ts = inject(TranslationService);
-  private fb = inject(FormBuilder);
   readonly auth = inject(AuthService);
   private api = inject(UserSettingsApiService);
   private snack = inject(MatSnackBar);
@@ -64,18 +63,18 @@ export class SettingsComponent implements OnInit {
     { value: 'ru', labelKey: 'settings.langRu' },
   ];
 
-  pwForm = this.fb.nonNullable.group(
+  pwForm = new FormGroup(
     {
-      currentPassword: ['', Validators.required],
-      newPassword: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/(?=.*[A-Z])(?=.*[0-9])/)]],
-      confirm: ['', Validators.required],
+      currentPassword: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      newPassword: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(8), Validators.pattern(/(?=.*[A-Z])(?=.*[0-9])/)] }),
+      confirm: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     },
     { validators: passwordMatch },
   );
 
-  emailForm = this.fb.nonNullable.group({
-    newEmail: ['', [Validators.required, Validators.email]],
-    currentPassword: [''],
+  emailForm = new FormGroup({
+    newEmail: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
+    currentPassword: new FormControl('', { nonNullable: true }),
   });
 
   ngOnInit(): void {

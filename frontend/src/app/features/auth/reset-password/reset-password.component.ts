@@ -1,5 +1,5 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -33,17 +33,16 @@ function passwordMatch(control: AbstractControl): ValidationErrors | null {
   styleUrl: './reset-password.component.scss',
 })
 export class ResetPasswordComponent implements OnInit {
-  private fb = inject(FormBuilder);
   private auth = inject(AuthService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
   private token = '';
 
-  form = this.fb.nonNullable.group(
+  form = new FormGroup(
     {
-      password: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/(?=.*[A-Z])(?=.*[0-9])/)]],
-      confirm: ['', Validators.required],
+      password: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(8), Validators.pattern(/(?=.*[A-Z])(?=.*[0-9])/)] }),
+      confirm: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     },
     { validators: passwordMatch },
   );

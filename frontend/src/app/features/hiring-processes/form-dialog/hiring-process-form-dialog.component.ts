@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import {
   ReactiveFormsModule,
   FormsModule,
-  FormBuilder,
   FormGroup,
+  FormControl,
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -79,12 +79,28 @@ export class HiringProcessFormDialogComponent implements OnInit {
   coverLetterPreview = false;
   notesPreview = false;
 
-  private fb = inject(FormBuilder);
   private api = inject(HiringProcessApiService);
   private snack = inject(MatSnackBar);
   private ts = inject(TranslationService);
 
-  form!: FormGroup;
+  form = new FormGroup({
+    companyName: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(500)] }),
+    contactChannel: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    contactPerson: new FormControl('', { nonNullable: true }),
+    salaryRange: new FormControl('', { nonNullable: true }),
+    appliedWith: new FormControl('', { nonNullable: true }),
+    appliedLink: new FormControl('', { nonNullable: true, validators: [Validators.pattern(/^(https?:\/\/.*)?$/)] }),
+    vacancyLink: new FormControl('', { nonNullable: true, validators: [Validators.pattern(/^(https?:\/\/.*)?$/)] }),
+    currentStage: new FormControl('', { nonNullable: true }),
+    firstContactDate: new FormControl<Date | null>(null),
+    lastContactDate: new FormControl<Date | null>(null),
+    vacancyPublishedDate: new FormControl<Date | null>(null),
+    applicationDate: new FormControl<Date | null>(null),
+    coverLetter: new FormControl('', { nonNullable: true }),
+    vacancyText: new FormControl('', { nonNullable: true }),
+    notes: new FormControl('', { nonNullable: true }),
+  });
+
   stages: string[] = [];
 
   constructor(
@@ -93,24 +109,6 @@ export class HiringProcessFormDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.form = this.fb.nonNullable.group({
-      companyName: ['', [Validators.required, Validators.maxLength(500)]],
-      contactChannel: ['', Validators.required],
-      contactPerson: [''],
-      salaryRange: [''],
-      appliedWith: [''],
-      appliedLink: ['', Validators.pattern(/^(https?:\/\/.*)?$/)],
-      vacancyLink: ['', Validators.pattern(/^(https?:\/\/.*)?$/)],
-      currentStage: [''],
-      firstContactDate: [null as Date | null],
-      lastContactDate: [null as Date | null],
-      vacancyPublishedDate: [null as Date | null],
-      applicationDate: [null as Date | null],
-      coverLetter: [''],
-      vacancyText: [''],
-      notes: [''],
-    });
-
     if (this.data.mode === 'edit' && this.data.record) {
       const r = this.data.record;
       this.form.patchValue({
@@ -152,7 +150,7 @@ export class HiringProcessFormDialogComponent implements OnInit {
 
   removeStage(stage: string): void {
     this.stages = this.stages.filter(s => s !== stage);
-    if (this.form.value['currentStage'] === stage) {
+    if (this.form.value.currentStage === stage) {
       this.form.patchValue({ currentStage: '' });
     }
   }
@@ -238,21 +236,21 @@ export class HiringProcessFormDialogComponent implements OnInit {
   private buildPayload(): HiringProcessForm {
     const v = this.form.getRawValue();
     return {
-      companyName: v['companyName'],
-      contactChannel: v['contactChannel'],
-      contactPerson: v['contactPerson'] || null,
-      salaryRange: v['salaryRange'] || null,
-      appliedWith: v['appliedWith'] || null,
-      appliedLink: v['appliedLink'] || null,
-      vacancyLink: v['vacancyLink'] || null,
-      currentStage: v['currentStage'] || null,
-      firstContactDate: this.formatDate(v['firstContactDate']),
-      lastContactDate: this.formatDate(v['lastContactDate']),
-      vacancyPublishedDate: this.formatDate(v['vacancyPublishedDate']),
-      applicationDate: this.formatDate(v['applicationDate']),
-      coverLetter: v['coverLetter'] || null,
-      vacancyText: v['vacancyText'] || null,
-      notes: v['notes'] || null,
+      companyName: v.companyName,
+      contactChannel: v.contactChannel,
+      contactPerson: v.contactPerson || null,
+      salaryRange: v.salaryRange || null,
+      appliedWith: v.appliedWith || null,
+      appliedLink: v.appliedLink || null,
+      vacancyLink: v.vacancyLink || null,
+      currentStage: v.currentStage || null,
+      firstContactDate: this.formatDate(v.firstContactDate),
+      lastContactDate: this.formatDate(v.lastContactDate),
+      vacancyPublishedDate: this.formatDate(v.vacancyPublishedDate),
+      applicationDate: this.formatDate(v.applicationDate),
+      coverLetter: v.coverLetter || null,
+      vacancyText: v.vacancyText || null,
+      notes: v.notes || null,
       hiringStages: this.stages.length ? this.stages : null,
     };
   }

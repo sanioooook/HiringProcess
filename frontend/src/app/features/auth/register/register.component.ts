@@ -2,7 +2,8 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ReactiveFormsModule,
-  FormBuilder,
+  FormGroup,
+  FormControl,
   Validators,
   AbstractControl,
   ValidationErrors,
@@ -42,16 +43,14 @@ function passwordMatchValidator(control: AbstractControl): ValidationErrors | nu
   styleUrl: './register.component.scss',
 })
 export class RegisterComponent {
-  private fb = inject(FormBuilder);
   protected store = inject(AuthStore);
 
-  form = this.fb.nonNullable.group(
+  form = new FormGroup(
     {
-      email: ['', [Validators.required, Validators.email]],
-      displayName: ['', [Validators.required, Validators.maxLength(200)]],
-      password: ['', [Validators.required, Validators.minLength(8),
-                             Validators.pattern(/(?=.*[A-Z])(?=.*[0-9])/)]],
-      confirmPassword: ['', Validators.required],
+      email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
+      displayName: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(200)] }),
+      password: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(8), Validators.pattern(/(?=.*[A-Z])(?=.*[0-9])/)] }),
+      confirmPassword: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     },
     { validators: passwordMatchValidator },
   );

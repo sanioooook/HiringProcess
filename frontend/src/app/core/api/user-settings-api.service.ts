@@ -7,17 +7,17 @@ export interface UserSettings {
   language: string;
 }
 
+const userSettingsBase = `${environment.apiUrl}/users/settings`;
+
 @Injectable({ providedIn: 'root' })
 export class UserSettingsApiService {
-  private readonly base = `${environment.apiUrl}/users/settings`;
-
   constructor(private http: HttpClient) {}
 
   get(): Observable<UserSettings> {
-    return this.http.get<UserSettings>(this.base);
+    return this.http.get<UserSettings>(userSettingsBase);
   }
 
   update(language: string): Observable<UserSettings> {
-    return this.http.put<UserSettings>(this.base, { language });
+    return this.http.put<UserSettings>(userSettingsBase, { language });
   }
 }

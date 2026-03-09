@@ -9,10 +9,15 @@ import {
   PagedResult,
 } from './hiring-process.model';
 
+const hiringProcessBase = `${environment.apiUrl}/hiring-processes`;
+const hiringProcessEndpoints = {
+  list: hiringProcessBase,
+  byId: (id: string) => `${hiringProcessBase}/${id}`,
+  file: (id: string) => `${hiringProcessBase}/${id}/file`,
+};
+
 @Injectable({ providedIn: 'root' })
 export class HiringProcessApiService {
-  private readonly base = `${environment.apiUrl}/hiring-processes`;
-
   constructor(private http: HttpClient) {}
 
   getAll(query: HiringProcessQuery = {}): Observable<PagedResult<HiringProcess>> {
@@ -24,36 +29,36 @@ export class HiringProcessApiService {
     if (query.sortBy) params = params.set('sortBy', query.sortBy);
     if (query.sortDirection) params = params.set('sortDirection', query.sortDirection);
 
-    return this.http.get<PagedResult<HiringProcess>>(this.base, { params });
+    return this.http.get<PagedResult<HiringProcess>>(hiringProcessEndpoints.list, { params });
   }
 
   getById(id: string): Observable<HiringProcess> {
-    return this.http.get<HiringProcess>(`${this.base}/${id}`);
+    return this.http.get<HiringProcess>(hiringProcessEndpoints.byId(id));
   }
 
   create(form: HiringProcessForm): Observable<HiringProcess> {
-    return this.http.post<HiringProcess>(this.base, form);
+    return this.http.post<HiringProcess>(hiringProcessEndpoints.list, form);
   }
 
   update(id: string, form: HiringProcessForm): Observable<HiringProcess> {
-    return this.http.put<HiringProcess>(`${this.base}/${id}`, form);
+    return this.http.put<HiringProcess>(hiringProcessEndpoints.byId(id), form);
   }
 
   delete(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.base}/${id}`);
+    return this.http.delete<void>(hiringProcessEndpoints.byId(id));
   }
 
   uploadFile(id: string, file: File): Observable<{ storedFileName: string }> {
     const form = new FormData();
     form.append('file', file);
-    return this.http.post<{ storedFileName: string }>(`${this.base}/${id}/file`, form);
+    return this.http.post<{ storedFileName: string }>(hiringProcessEndpoints.file(id), form);
   }
 
   getFileDownloadUrl(id: string): string {
-    return `${this.base}/${id}/file`;
+    return hiringProcessEndpoints.file(id);
   }
 
   downloadFile(id: string): Observable<Blob> {
-    return this.http.get(`${this.base}/${id}/file`, { responseType: 'blob' });
+    return this.http.get(hiringProcessEndpoints.file(id), { responseType: 'blob' });
   }
 }

@@ -17,6 +17,21 @@ const TOKEN_KEY = 'hp_token';
 const USER_KEY = 'hp_user';
 const REFRESH_KEY = 'hp_refresh_token';
 
+const authBase = `${environment.apiUrl}/auth`;
+const authEndpoints = {
+  register: `${authBase}/register`,
+  login: `${authBase}/login`,
+  google: `${authBase}/google`,
+  refresh: `${authBase}/refresh`,
+  verifyEmail: `${authBase}/verify-email`,
+  resendVerification: `${authBase}/resend-verification`,
+  forgotPassword: `${authBase}/forgot-password`,
+  resetPassword: `${authBase}/reset-password`,
+  changePassword: `${authBase}/change-password`,
+  changeEmail: `${authBase}/change-email`,
+  confirmEmailChange: `${authBase}/confirm-email-change`,
+};
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly _token = signal<string | null>(localStorage.getItem(TOKEN_KEY));
@@ -38,19 +53,19 @@ export class AuthService {
 
   register(request: RegisterRequest): Observable<AuthResponse> {
     return this.http
-      .post<AuthResponse>(`${environment.apiUrl}/auth/register`, request)
+      .post<AuthResponse>(authEndpoints.register, request)
       .pipe(tap(res => this.persist(res)));
   }
 
   login(request: LoginRequest): Observable<AuthResponse> {
     return this.http
-      .post<AuthResponse>(`${environment.apiUrl}/auth/login`, request)
+      .post<AuthResponse>(authEndpoints.login, request)
       .pipe(tap(res => this.persist(res)));
   }
 
   googleAuth(request: GoogleAuthRequest): Observable<AuthResponse> {
     return this.http
-      .post<AuthResponse>(`${environment.apiUrl}/auth/google`, request)
+      .post<AuthResponse>(authEndpoints.google, request)
       .pipe(tap(res => this.persist(res)));
   }
 
@@ -60,10 +75,7 @@ export class AuthService {
     if (!rt) return throwError(() => new Error('no_refresh_token'));
 
     return this.http
-      .post<{ token: string; refreshToken: string }>(
-        `${environment.apiUrl}/auth/refresh`,
-        { refreshToken: rt },
-      )
+      .post<{ token: string; refreshToken: string }>(authEndpoints.refresh, { refreshToken: rt })
       .pipe(
         tap(res => {
           localStorage.setItem(TOKEN_KEY, res.token);
@@ -93,31 +105,31 @@ export class AuthService {
   }
 
   verifyEmail(token: string): Observable<void> {
-    return this.http.post<void>(`${environment.apiUrl}/auth/verify-email`, { token });
+    return this.http.post<void>(authEndpoints.verifyEmail, { token });
   }
 
   resendVerification(email: string): Observable<void> {
-    return this.http.post<void>(`${environment.apiUrl}/auth/resend-verification`, { email });
+    return this.http.post<void>(authEndpoints.resendVerification, { email });
   }
 
   forgotPassword(email: string): Observable<void> {
-    return this.http.post<void>(`${environment.apiUrl}/auth/forgot-password`, { email });
+    return this.http.post<void>(authEndpoints.forgotPassword, { email });
   }
 
   resetPassword(token: string, newPassword: string): Observable<void> {
-    return this.http.post<void>(`${environment.apiUrl}/auth/reset-password`, { token, newPassword });
+    return this.http.post<void>(authEndpoints.resetPassword, { token, newPassword });
   }
 
   changePassword(currentPassword: string, newPassword: string): Observable<void> {
-    return this.http.put<void>(`${environment.apiUrl}/auth/change-password`, { currentPassword, newPassword });
+    return this.http.put<void>(authEndpoints.changePassword, { currentPassword, newPassword });
   }
 
   changeEmail(newEmail: string, currentPassword: string | null): Observable<void> {
-    return this.http.put<void>(`${environment.apiUrl}/auth/change-email`, { newEmail, currentPassword });
+    return this.http.put<void>(authEndpoints.changeEmail, { newEmail, currentPassword });
   }
 
   confirmEmailChange(token: string): Observable<void> {
-    return this.http.post<void>(`${environment.apiUrl}/auth/confirm-email-change`, { token });
+    return this.http.post<void>(authEndpoints.confirmEmailChange, { token });
   }
 
   // Private helpers
