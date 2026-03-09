@@ -1,16 +1,20 @@
+using System.Security.Cryptography;
 using FluentValidation;
 using HiringProcess.Api.Common;
 using HiringProcess.Api.Common.Localization;
 using HiringProcess.Api.Features.Auth.Models;
 using HiringProcess.Api.Infrastructure;
+using HiringProcess.Api.Infrastructure.Email;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace HiringProcess.Api.Features.Auth.Commands;
 
 /// <summary>
 /// Handles user registration with email + password.
 /// Validates input, checks for duplicate email, hashes password, persists user, returns JWT.
+/// Sends an email verification link — failure to send is logged but does not fail registration.
 /// </summary>
 public sealed class RegisterHandler
 {
@@ -20,6 +24,8 @@ public sealed class RegisterHandler
     private readonly ILocalizationService _loc;
     private readonly ICurrentLanguageService _currentLang;
     private readonly IConfiguration _config;
+    private readonly IEmailService _email;
+    private readonly ILogger<RegisterHandler> _logger;
 
     public RegisterHandler(
         AppDbContext db,
@@ -27,7 +33,9 @@ public sealed class RegisterHandler
         IValidator<RegisterCommand> validator,
         ILocalizationService loc,
         ICurrentLanguageService currentLang,
-        IConfiguration config)
+        IConfiguration config,
+        IEmailService email,
+        ILogger<RegisterHandler> logger)
     {
         _db = db;
         _jwt = jwt;
@@ -35,6 +43,8 @@ public sealed class RegisterHandler
         _loc = loc;
         _currentLang = currentLang;
         _config = config;
+        _email = email;
+        _logger = logger;
     }
 
     public async Task<Result<RegisterResponse>> HandleAsync(RegisterCommand command, CancellationToken ct = default)
@@ -58,6 +68,9 @@ public sealed class RegisterHandler
         // Hash password
         var hash = BCrypt.Net.BCrypt.HashPassword(command.Password);
 
+        // Generate email verification token
+        var verificationToken = GenerateToken();
+
         // Persist new user with the current language preference
         var user = new AppUser
         {
@@ -66,7 +79,10 @@ public sealed class RegisterHandler
             DisplayName = command.DisplayName.Trim(),
             PasswordHash = hash,
             Language = lang,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            IsEmailVerified = false,
+            EmailVerificationToken = verificationToken,
+            EmailVerificationTokenExpiry = DateTime.UtcNow.AddHours(24)
         };
 
         _db.Users.Add(user);
@@ -85,6 +101,26 @@ public sealed class RegisterHandler
         });
         await _db.SaveChangesAsync(ct);
 
-        return new RegisterResponse(user.Id, user.Email, user.DisplayName, token, user.Language, refreshTokenValue);
+        // Send verification email (non-blocking — failure doesn't fail registration)
+        try
+        {
+            var frontendUrl = _config["App:FrontendUrl"] ?? "http://localhost:4200";
+            var link = $"{frontendUrl}/verify-email?token={verificationToken}";
+            var subject = _loc.Get("email.verifySubject", lang);
+            var body = $"<p>{_loc.Get("email.verifyBody", lang)}</p><p><a href=\"{link}\">{link}</a></p>";
+            await _email.SendAsync(user.Email, subject, body, ct);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to send verification email to {Email}", user.Email);
+        }
+
+        return new RegisterResponse(user.Id, user.Email, user.DisplayName, token, user.Language, refreshTokenValue, true);
+    }
+
+    internal static string GenerateToken()
+    {
+        var bytes = RandomNumberGenerator.GetBytes(32);
+        return Convert.ToHexString(bytes).ToLowerInvariant();
     }
 }

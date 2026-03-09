@@ -63,6 +63,15 @@ public sealed class AppDbContext : DbContext
                   .IsRequired()
                   .HasMaxLength(8)
                   .HasDefaultValue("en");
+
+            entity.Property(u => u.IsEmailVerified)
+                  .IsRequired()
+                  .HasDefaultValue(false);
+
+            entity.Property(u => u.EmailVerificationToken).HasMaxLength(128);
+            entity.Property(u => u.PasswordResetToken).HasMaxLength(128);
+            entity.Property(u => u.PendingEmail).HasMaxLength(320);
+            entity.Property(u => u.EmailChangeToken).HasMaxLength(128);
         });
     }
 

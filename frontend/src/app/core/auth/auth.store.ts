@@ -11,11 +11,13 @@ import { TranslationService } from '../i18n/translation.service';
 type AuthState = {
   loading: boolean;
   error: string | null;
+  emailNotVerified: boolean;
+  lastEmail: string | null;
 };
 
 export const AuthStore = signalStore(
   { providedIn: 'root' },
-  withState<AuthState>({ loading: false, error: null }),
+  withState<AuthState>({ loading: false, error: null, emailNotVerified: false, lastEmail: null }),
   withMethods((store,
     authService = inject(AuthService),
     router = inject(Router),
@@ -24,7 +26,7 @@ export const AuthStore = signalStore(
 
     login: rxMethod<LoginRequest>(source$ =>
       source$.pipe(
-        tap(() => patchState(store, { loading: true, error: null })),
+        tap(() => patchState(store, { loading: true, error: null, emailNotVerified: false })),
         switchMap(request =>
           authService.login(request).pipe(
             tap(() => {
@@ -32,10 +34,21 @@ export const AuthStore = signalStore(
               router.navigate(['/app']);
             }),
             catchError((err: any) => {
-              patchState(store, {
-                loading: false,
-                error: err?.error?.message ?? ts.t('snack.saveFailed'),
-              });
+              const code = err?.error?.code;
+              if (code === 'EmailNotVerified') {
+                patchState(store, {
+                  loading: false,
+                  emailNotVerified: true,
+                  lastEmail: request.email,
+                  error: null,
+                });
+              } else {
+                patchState(store, {
+                  loading: false,
+                  emailNotVerified: false,
+                  error: err?.error?.message ?? ts.t('snack.saveFailed'),
+                });
+              }
               return EMPTY;
             }),
           )
@@ -65,7 +78,7 @@ export const AuthStore = signalStore(
     ),
 
     clearError(): void {
-      patchState(store, { error: null });
+      patchState(store, { error: null, emailNotVerified: false });
     },
 
   })),

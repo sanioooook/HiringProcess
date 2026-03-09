@@ -25,3 +25,34 @@
   flex-direction: column;
   gap: 8px;
 }
+
+.form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.form-action {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.current-email {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 14px;
+  margin-bottom: 12px;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}

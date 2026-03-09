@@ -1,0 +1,22 @@
+<div class="auth-page">
+  <mat-card class="auth-card">
+    <mat-card-content class="state-card">
+      @if (state() === 'loading') {
+        <mat-spinner diameter="48" />
+        <p>{{ 'auth.confirmEmailChange.confirming' | translate }}</p>
+      } @else if (state() === 'success') {
+        <mat-icon class="icon-success">check_circle</mat-icon>
+        <p>{{ 'auth.confirmEmailChange.success' | translate }}</p>
+        <a mat-flat-button color="primary" routerLink="/login">
+          {{ 'auth.confirmEmailChange.signIn' | translate }}
+        </a>
+      } @else {
+        <mat-icon class="icon-error">error_outline</mat-icon>
+        <p>{{ 'auth.confirmEmailChange.error' | translate }}</p>
+        <a mat-stroked-button routerLink="/login">
+          {{ 'auth.confirmEmailChange.signIn' | translate }}
+        </a>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>

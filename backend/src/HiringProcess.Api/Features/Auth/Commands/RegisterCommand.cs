@@ -18,5 +18,6 @@ public sealed record RegisterResponse(
     string DisplayName,
     string Token,
     string Language,
-    string RefreshToken
+    string RefreshToken,
+    bool HasPassword
 );

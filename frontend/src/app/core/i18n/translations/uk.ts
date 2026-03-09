@@ -12,6 +12,10 @@ export const uk: Record<string, string> = {
   'auth.login.submit': 'Увійти',
   'auth.login.noAccount': 'Немає облікового запису?',
   'auth.login.register': 'Зареєструватися',
+  'auth.login.forgotPassword': 'Забули пароль?',
+  'auth.login.emailNotVerified': 'Будь ласка, підтвердьте email перед входом.',
+  'auth.login.resendVerification': 'Надіслати лист підтвердження',
+  'auth.login.verificationSent': 'Лист надіслано. Перевірте пошту.',
 
   // Auth — register
   'auth.register.title': 'Створити обліковий запис',
@@ -19,6 +23,49 @@ export const uk: Record<string, string> = {
   'auth.register.submit': 'Зареєструватися',
   'auth.register.hasAccount': 'Вже є обліковий запис?',
   'auth.register.signIn': 'Увійти',
+  'auth.register.checkEmail': 'Обліковий запис створено! Перевірте пошту для підтвердження.',
+
+  // Auth — verify email
+  'auth.verifyEmail.verifying': 'Підтвердження email...',
+  'auth.verifyEmail.success': 'Email підтверджено! Тепер можна увійти.',
+  'auth.verifyEmail.error': 'Посилання недійсне або термін дії минув.',
+  'auth.verifyEmail.signIn': 'Увійти',
+
+  // Auth — forgot password
+  'auth.forgotPassword.title': 'Відновлення пароля',
+  'auth.forgotPassword.subtitle': 'Введіть email для отримання посилання на скидання пароля.',
+  'auth.forgotPassword.submit': 'Надіслати посилання',
+  'auth.forgotPassword.sent': 'Якщо обліковий запис існує, посилання надіслано.',
+  'auth.forgotPassword.backToLogin': 'Назад до входу',
+
+  // Auth — reset password
+  'auth.resetPassword.title': 'Новий пароль',
+  'auth.resetPassword.newPassword': 'Новий пароль',
+  'auth.resetPassword.submit': 'Встановити пароль',
+  'auth.resetPassword.success': 'Пароль оновлено! Тепер можна увійти.',
+  'auth.resetPassword.error': 'Посилання недійсне або термін дії минув.',
+
+  // Auth — confirm email change
+  'auth.confirmEmailChange.confirming': 'Підтвердження нового email...',
+  'auth.confirmEmailChange.success': 'Адресу email успішно змінено.',
+  'auth.confirmEmailChange.error': 'Посилання недійсне або термін дії минув.',
+  'auth.confirmEmailChange.signIn': 'Увійти',
+
+  // Settings — change password
+  'settings.changePassword.title': 'Змінити пароль',
+  'settings.changePassword.current': 'Поточний пароль',
+  'settings.changePassword.new': 'Новий пароль',
+  'settings.changePassword.confirm': 'Підтвердіть новий пароль',
+  'settings.changePassword.submit': 'Змінити пароль',
+  'settings.changePassword.success': 'Пароль успішно змінено.',
+
+  // Settings — change email
+  'settings.changeEmail.title': 'Змінити email',
+  'settings.changeEmail.current': 'Поточний email',
+  'settings.changeEmail.new': 'Новий email',
+  'settings.changeEmail.password': 'Поточний пароль',
+  'settings.changeEmail.submit': 'Надіслати підтвердження',
+  'settings.changeEmail.success': 'Підтвердження надіслано на нову адресу.',
 
   // Shared field labels
   'field.email': 'Email',

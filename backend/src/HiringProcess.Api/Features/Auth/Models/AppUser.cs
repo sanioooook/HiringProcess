@@ -19,4 +19,18 @@ public sealed class AppUser
     public DateTime CreatedAt { get; set; }
 
     public string Language { get; set; } = "en";
+
+    // Email verification
+    public bool IsEmailVerified { get; set; } = false;
+    public string? EmailVerificationToken { get; set; }
+    public DateTime? EmailVerificationTokenExpiry { get; set; }
+
+    // Password reset
+    public string? PasswordResetToken { get; set; }
+    public DateTime? PasswordResetTokenExpiry { get; set; }
+
+    // Email change (pending new email flow)
+    public string? PendingEmail { get; set; }
+    public string? EmailChangeToken { get; set; }
+    public DateTime? EmailChangeTokenExpiry { get; set; }
 }

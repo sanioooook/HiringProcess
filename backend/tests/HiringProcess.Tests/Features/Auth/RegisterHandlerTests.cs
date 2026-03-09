@@ -1,7 +1,9 @@
 using HiringProcess.Api.Features.Auth;
 using HiringProcess.Api.Features.Auth.Commands;
+using HiringProcess.Api.Infrastructure.Email;
 using HiringProcess.Tests.Common;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace HiringProcess.Tests.Features.Auth;
 
@@ -21,7 +23,9 @@ public sealed class RegisterHandlerTests : IDisposable
         var config = BuildConfig();
         var jwt = new JwtService(config);
         var validator = new RegisterValidator(TestLocalization.Loc, TestLocalization.CurrentLang);
-        _handler = new RegisterHandler(_db, jwt, validator, TestLocalization.Loc, TestLocalization.CurrentLang, config);
+        var emailService = new NullEmailService();
+        var logger = NullLogger<RegisterHandler>.Instance;
+        _handler = new RegisterHandler(_db, jwt, validator, TestLocalization.Loc, TestLocalization.CurrentLang, config, emailService, logger);
     }
 
     [Fact]

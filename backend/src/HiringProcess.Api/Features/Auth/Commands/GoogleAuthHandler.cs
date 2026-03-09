@@ -69,7 +69,7 @@ public sealed class GoogleAuthHandler
 
         if (user is null)
         {
-            // First-time Google sign-in — create account
+            // First-time Google sign-in — create account (email already verified by Google)
             user = new AppUser
             {
                 Id = Guid.NewGuid(),
@@ -77,7 +77,8 @@ public sealed class GoogleAuthHandler
                 DisplayName = displayName,
                 GoogleId = googleId,
                 Language = lang,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                IsEmailVerified = true
             };
             _db.Users.Add(user);
             isNewUser = true;
@@ -104,6 +105,6 @@ public sealed class GoogleAuthHandler
         });
         await _db.SaveChangesAsync(ct);
 
-        return new GoogleAuthResponse(user.Id, user.Email, user.DisplayName, token, isNewUser, user.Language, refreshTokenValue);
+        return new GoogleAuthResponse(user.Id, user.Email, user.DisplayName, token, isNewUser, user.Language, refreshTokenValue, user.PasswordHash is not null);
     }
 }

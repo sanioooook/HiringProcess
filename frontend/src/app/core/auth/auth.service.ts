@@ -92,6 +92,34 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
+  verifyEmail(token: string): Observable<void> {
+    return this.http.post<void>(`${environment.apiUrl}/auth/verify-email`, { token });
+  }
+
+  resendVerification(email: string): Observable<void> {
+    return this.http.post<void>(`${environment.apiUrl}/auth/resend-verification`, { email });
+  }
+
+  forgotPassword(email: string): Observable<void> {
+    return this.http.post<void>(`${environment.apiUrl}/auth/forgot-password`, { email });
+  }
+
+  resetPassword(token: string, newPassword: string): Observable<void> {
+    return this.http.post<void>(`${environment.apiUrl}/auth/reset-password`, { token, newPassword });
+  }
+
+  changePassword(currentPassword: string, newPassword: string): Observable<void> {
+    return this.http.put<void>(`${environment.apiUrl}/auth/change-password`, { currentPassword, newPassword });
+  }
+
+  changeEmail(newEmail: string, currentPassword: string | null): Observable<void> {
+    return this.http.put<void>(`${environment.apiUrl}/auth/change-email`, { newEmail, currentPassword });
+  }
+
+  confirmEmailChange(token: string): Observable<void> {
+    return this.http.post<void>(`${environment.apiUrl}/auth/confirm-email-change`, { token });
+  }
+
   // Private helpers
 
   private persist(res: AuthResponse): void {
@@ -101,6 +129,7 @@ export class AuthService {
       email: res.email,
       displayName: res.displayName,
       language: lang,
+      hasPassword: res.hasPassword,
     };
     localStorage.setItem(TOKEN_KEY, res.token);
     localStorage.setItem(USER_KEY, JSON.stringify(user));

@@ -14,5 +14,6 @@ public sealed record LoginResponse(
     string DisplayName,
     string Token,
     string Language,
-    string RefreshToken
+    string RefreshToken,
+    bool HasPassword
 );

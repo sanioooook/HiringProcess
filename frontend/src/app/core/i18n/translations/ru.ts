@@ -12,6 +12,10 @@ export const ru: Record<string, string> = {
   'auth.login.submit': 'Войти',
   'auth.login.noAccount': 'Нет аккаунта?',
   'auth.login.register': 'Зарегистрироваться',
+  'auth.login.forgotPassword': 'Забыли пароль?',
+  'auth.login.emailNotVerified': 'Пожалуйста, подтвердите email перед входом.',
+  'auth.login.resendVerification': 'Отправить письмо подтверждения',
+  'auth.login.verificationSent': 'Письмо отправлено. Проверьте почту.',
 
   // Auth — register
   'auth.register.title': 'Создать аккаунт',
@@ -19,6 +23,49 @@ export const ru: Record<string, string> = {
   'auth.register.submit': 'Зарегистрироваться',
   'auth.register.hasAccount': 'Уже есть аккаунт?',
   'auth.register.signIn': 'Войти',
+  'auth.register.checkEmail': 'Аккаунт создан! Проверьте почту для подтверждения.',
+
+  // Auth — verify email
+  'auth.verifyEmail.verifying': 'Подтверждение email...',
+  'auth.verifyEmail.success': 'Email подтверждён! Теперь можно войти.',
+  'auth.verifyEmail.error': 'Ссылка недействительна или истёк срок.',
+  'auth.verifyEmail.signIn': 'Войти',
+
+  // Auth — forgot password
+  'auth.forgotPassword.title': 'Восстановление пароля',
+  'auth.forgotPassword.subtitle': 'Введите email для получения ссылки на сброс пароля.',
+  'auth.forgotPassword.submit': 'Отправить ссылку',
+  'auth.forgotPassword.sent': 'Если аккаунт существует, ссылка отправлена.',
+  'auth.forgotPassword.backToLogin': 'Назад к входу',
+
+  // Auth — reset password
+  'auth.resetPassword.title': 'Новый пароль',
+  'auth.resetPassword.newPassword': 'Новый пароль',
+  'auth.resetPassword.submit': 'Установить пароль',
+  'auth.resetPassword.success': 'Пароль обновлён! Теперь можно войти.',
+  'auth.resetPassword.error': 'Ссылка недействительна или истёк срок.',
+
+  // Auth — confirm email change
+  'auth.confirmEmailChange.confirming': 'Подтверждение нового email...',
+  'auth.confirmEmailChange.success': 'Адрес email успешно изменён.',
+  'auth.confirmEmailChange.error': 'Ссылка недействительна или истёк срок.',
+  'auth.confirmEmailChange.signIn': 'Войти',
+
+  // Settings — change password
+  'settings.changePassword.title': 'Сменить пароль',
+  'settings.changePassword.current': 'Текущий пароль',
+  'settings.changePassword.new': 'Новый пароль',
+  'settings.changePassword.confirm': 'Подтвердите новый пароль',
+  'settings.changePassword.submit': 'Сменить пароль',
+  'settings.changePassword.success': 'Пароль успешно изменён.',
+
+  // Settings — change email
+  'settings.changeEmail.title': 'Изменить email',
+  'settings.changeEmail.current': 'Текущий email',
+  'settings.changeEmail.new': 'Новый email',
+  'settings.changeEmail.password': 'Текущий пароль',
+  'settings.changeEmail.submit': 'Отправить подтверждение',
+  'settings.changeEmail.success': 'Подтверждение отправлено на новый адрес.',
 
   // Shared field labels
   'field.email': 'Email',

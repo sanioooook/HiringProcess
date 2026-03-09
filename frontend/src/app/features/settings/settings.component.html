@@ -5,6 +5,8 @@
     </mat-card-header>
 
     <mat-card-content>
+
+      <!-- Language -->
       <div class="setting-row">
         <p class="setting-label">{{ 'settings.language' | translate }}</p>
         <mat-radio-group class="lang-group" [ngModel]="selectedLang()" (ngModelChange)="selectedLang.set($event)">
@@ -15,6 +17,123 @@
           }
         </mat-radio-group>
       </div>
+
+      <mat-divider />
+
+      <!-- Change Password (only for password-based accounts) -->
+      @if (auth.user()?.hasPassword) {
+        <div class="setting-row">
+          <p class="setting-label">{{ 'settings.changePassword.title' | translate }}</p>
+          <form [formGroup]="pwForm" (ngSubmit)="changePassword()" class="form-fields">
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'settings.changePassword.current' | translate }}</mat-label>
+              <input matInput formControlName="currentPassword"
+                     [type]="hideCurrentPw ? 'password' : 'text'"
+                     autocomplete="current-password" />
+              <mat-icon matPrefix>lock</mat-icon>
+              <button mat-icon-button matSuffix type="button" (click)="hideCurrentPw = !hideCurrentPw">
+                <mat-icon>{{ hideCurrentPw ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+              @if (pwForm.controls.currentPassword.hasError('required')) {
+                <mat-error>{{ 'validation.passwordRequired' | translate }}</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'settings.changePassword.new' | translate }}</mat-label>
+              <input matInput formControlName="newPassword"
+                     [type]="hideNewPw ? 'password' : 'text'"
+                     autocomplete="new-password" />
+              <mat-icon matPrefix>lock_outline</mat-icon>
+              <button mat-icon-button matSuffix type="button" (click)="hideNewPw = !hideNewPw">
+                <mat-icon>{{ hideNewPw ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+              @if (pwForm.controls.newPassword.hasError('required')) {
+                <mat-error>{{ 'validation.passwordRequired' | translate }}</mat-error>
+              } @else if (pwForm.controls.newPassword.hasError('minlength')) {
+                <mat-error>{{ 'validation.passwordMinLength' | translate }}</mat-error>
+              } @else if (pwForm.controls.newPassword.hasError('pattern')) {
+                <mat-error>{{ 'validation.passwordPattern' | translate }}</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'settings.changePassword.confirm' | translate }}</mat-label>
+              <input matInput formControlName="confirm"
+                     [type]="hideNewPwConfirm ? 'password' : 'text'"
+                     autocomplete="new-password" />
+              <mat-icon matPrefix>lock_outline</mat-icon>
+              <button mat-icon-button matSuffix type="button" (click)="hideNewPwConfirm = !hideNewPwConfirm">
+                <mat-icon>{{ hideNewPwConfirm ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+              @if (pwForm.hasError('mismatch') && pwForm.controls.confirm.touched) {
+                <mat-error>{{ 'validation.passwordsMismatch' | translate }}</mat-error>
+              }
+            </mat-form-field>
+
+            <div class="form-action">
+              <button mat-flat-button color="primary" type="submit" [disabled]="pwLoading()">
+                @if (pwLoading()) {
+                  <mat-spinner diameter="18" />
+                } @else {
+                  {{ 'settings.changePassword.submit' | translate }}
+                }
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <mat-divider />
+      }
+
+      <!-- Change Email -->
+      <div class="setting-row">
+        <p class="setting-label">{{ 'settings.changeEmail.title' | translate }}</p>
+
+        <p class="current-email">
+          <mat-icon>email</mat-icon>
+          {{ auth.user()?.email }}
+        </p>
+
+        <form [formGroup]="emailForm" (ngSubmit)="changeEmail()" class="form-fields">
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'settings.changeEmail.new' | translate }}</mat-label>
+            <input matInput formControlName="newEmail" type="email" autocomplete="email" />
+            <mat-icon matPrefix>email</mat-icon>
+            @if (emailForm.controls.newEmail.hasError('required')) {
+              <mat-error>{{ 'validation.emailRequired' | translate }}</mat-error>
+            } @else if (emailForm.controls.newEmail.hasError('email')) {
+              <mat-error>{{ 'validation.emailInvalid' | translate }}</mat-error>
+            }
+          </mat-form-field>
+
+          @if (auth.user()?.hasPassword) {
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'settings.changeEmail.password' | translate }}</mat-label>
+              <input matInput formControlName="currentPassword"
+                     [type]="hideEmailPw ? 'password' : 'text'"
+                     autocomplete="current-password" />
+              <mat-icon matPrefix>lock</mat-icon>
+              <button mat-icon-button matSuffix type="button" (click)="hideEmailPw = !hideEmailPw">
+                <mat-icon>{{ hideEmailPw ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+            </mat-form-field>
+          }
+
+          <div class="form-action">
+            <button mat-flat-button color="primary" type="submit" [disabled]="emailLoading()">
+              @if (emailLoading()) {
+                <mat-spinner diameter="18" />
+              } @else {
+                {{ 'settings.changeEmail.submit' | translate }}
+              }
+            </button>
+          </div>
+        </form>
+      </div>
+
     </mat-card-content>
 
     <mat-card-actions align="end">

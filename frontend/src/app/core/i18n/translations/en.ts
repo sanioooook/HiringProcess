@@ -12,6 +12,10 @@ export const en: Record<string, string> = {
   'auth.login.submit': 'Sign In',
   'auth.login.noAccount': "Don't have an account?",
   'auth.login.register': 'Register',
+  'auth.login.forgotPassword': 'Forgot password?',
+  'auth.login.emailNotVerified': 'Please verify your email before signing in.',
+  'auth.login.resendVerification': 'Resend verification email',
+  'auth.login.verificationSent': 'Verification email sent. Check your inbox.',
 
   // Auth — register
   'auth.register.title': 'Create Account',
@@ -19,6 +23,49 @@ export const en: Record<string, string> = {
   'auth.register.submit': 'Create Account',
   'auth.register.hasAccount': 'Already have an account?',
   'auth.register.signIn': 'Sign In',
+  'auth.register.checkEmail': 'Account created! Check your email to verify your address.',
+
+  // Auth — verify email
+  'auth.verifyEmail.verifying': 'Verifying your email...',
+  'auth.verifyEmail.success': 'Email verified! You can now sign in.',
+  'auth.verifyEmail.error': 'The link is invalid or has expired.',
+  'auth.verifyEmail.signIn': 'Sign In',
+
+  // Auth — forgot password
+  'auth.forgotPassword.title': 'Forgot Password',
+  'auth.forgotPassword.subtitle': 'Enter your email to receive a reset link.',
+  'auth.forgotPassword.submit': 'Send Reset Link',
+  'auth.forgotPassword.sent': 'If an account exists, a reset link has been sent.',
+  'auth.forgotPassword.backToLogin': 'Back to Sign In',
+
+  // Auth — reset password
+  'auth.resetPassword.title': 'Reset Password',
+  'auth.resetPassword.newPassword': 'New Password',
+  'auth.resetPassword.submit': 'Set New Password',
+  'auth.resetPassword.success': 'Password updated! You can now sign in.',
+  'auth.resetPassword.error': 'The link is invalid or has expired.',
+
+  // Auth — confirm email change
+  'auth.confirmEmailChange.confirming': 'Confirming your new email...',
+  'auth.confirmEmailChange.success': 'Email address updated successfully.',
+  'auth.confirmEmailChange.error': 'The link is invalid or has expired.',
+  'auth.confirmEmailChange.signIn': 'Sign In',
+
+  // Settings — change password
+  'settings.changePassword.title': 'Change Password',
+  'settings.changePassword.current': 'Current Password',
+  'settings.changePassword.new': 'New Password',
+  'settings.changePassword.confirm': 'Confirm New Password',
+  'settings.changePassword.submit': 'Change Password',
+  'settings.changePassword.success': 'Password changed successfully.',
+
+  // Settings — change email
+  'settings.changeEmail.title': 'Change Email',
+  'settings.changeEmail.current': 'Current Email',
+  'settings.changeEmail.new': 'New Email',
+  'settings.changeEmail.password': 'Current Password',
+  'settings.changeEmail.submit': 'Send Confirmation',
+  'settings.changeEmail.success': 'Confirmation sent to your new email address.',
 
   // Shared field labels
   'field.email': 'Email',

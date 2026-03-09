@@ -5,6 +5,7 @@ export interface AuthResponse {
   token: string;
   language: string;
   refreshToken?: string;
+  hasPassword?: boolean;
 }
 
 export interface RegisterRequest {
@@ -27,4 +28,5 @@ export interface CurrentUser {
   email: string;
   displayName: string;
   language: string;
+  hasPassword?: boolean;
 }

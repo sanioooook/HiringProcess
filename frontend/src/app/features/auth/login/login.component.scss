@@ -33,3 +33,33 @@
   font-size: 13px;
   margin-bottom: 4px;
 }
+
+.forgot-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -4px;
+}
+
+.forgot-link {
+  font-size: 13px;
+}
+
+.verify-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  background: var(--mat-sys-secondary-container);
+  color: var(--mat-sys-on-secondary-container);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 13px;
+
+  mat-icon {
+    flex-shrink: 0;
+  }
+
+  span {
+    flex: 1;
+  }
+}

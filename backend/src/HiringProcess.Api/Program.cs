@@ -8,6 +8,7 @@ using HiringProcess.Api.Features.HiringProcesses.Commands;
 using HiringProcess.Api.Features.HiringProcesses.Queries;
 using HiringProcess.Api.Features.UserSettings;
 using HiringProcess.Api.Infrastructure;
+using HiringProcess.Api.Infrastructure.Email;
 using HiringProcess.Api.Infrastructure.FileStorage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -43,6 +44,8 @@ builder.Services.AddAuthorization();
 
 // Infrastructure
 builder.Services.AddSingleton<IFileStorageService, LocalFileStorageService>();
+builder.Services.AddHttpClient<ResendEmailService>();
+builder.Services.AddScoped<IEmailService, ResendEmailService>();
 
 // Localization
 builder.Services.AddSingleton<ILocalizationService, LocalizationService>();
@@ -54,6 +57,13 @@ builder.Services.AddScoped<RegisterHandler>();
 builder.Services.AddScoped<LoginHandler>();
 builder.Services.AddScoped<GoogleAuthHandler>();
 builder.Services.AddScoped<RefreshTokenHandler>();
+builder.Services.AddScoped<VerifyEmailHandler>();
+builder.Services.AddScoped<ResendVerificationHandler>();
+builder.Services.AddScoped<ForgotPasswordHandler>();
+builder.Services.AddScoped<ResetPasswordHandler>();
+builder.Services.AddScoped<ChangePasswordHandler>();
+builder.Services.AddScoped<ChangeEmailHandler>();
+builder.Services.AddScoped<ConfirmEmailChangeHandler>();
 
 // HiringProcesses handlers
 builder.Services.AddScoped<GetHiringProcessesHandler>();

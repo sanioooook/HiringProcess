@@ -33,6 +33,26 @@
           }
         </mat-form-field>
 
+        <div class="forgot-row">
+          <a mat-button routerLink="/forgot-password" class="forgot-link">
+            {{ 'auth.login.forgotPassword' | translate }}
+          </a>
+        </div>
+
+        @if (store.emailNotVerified()) {
+          <div class="verify-banner">
+            <mat-icon>mark_email_unread</mat-icon>
+            <span>{{ 'auth.login.emailNotVerified' | translate }}</span>
+            <button mat-stroked-button type="button" (click)="resendVerification()" [disabled]="resending()">
+              @if (resending()) {
+                <mat-spinner diameter="16" />
+              } @else {
+                {{ 'auth.login.resendVerification' | translate }}
+              }
+            </button>
+          </div>
+        }
+
         @if (store.error()) {
           <mat-error class="server-error">{{ store.error() }}</mat-error>
         }

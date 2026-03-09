@@ -156,6 +156,22 @@ jobs:
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
 
     steps:
+      - name: Backup database
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: root
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            BACKUP_DIR=~/backups/hiringprocess
+            mkdir -p $BACKUP_DIR
+            TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+            docker exec hp_postgres pg_dump -U postgres hiringprocess \
+              | gzip > $BACKUP_DIR/backup_${TIMESTAMP}.sql.gz \
+              && echo "Backup saved: backup_${TIMESTAMP}.sql.gz" \
+              || echo "WARNING: backup failed (first deploy?), continuing"
+            ls -t $BACKUP_DIR/backup_*.sql.gz 2>/dev/null | tail -n +8 | xargs -r rm --
+
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1
         with:

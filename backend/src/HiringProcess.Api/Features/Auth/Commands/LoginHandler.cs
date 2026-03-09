@@ -4,12 +4,14 @@ using HiringProcess.Api.Common.Localization;
 using HiringProcess.Api.Features.Auth.Models;
 using HiringProcess.Api.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace HiringProcess.Api.Features.Auth.Commands;
 
 /// <summary>
 /// Handles email + password login.
 /// Returns a generic "Invalid credentials" error to prevent user enumeration.
+/// Blocks login if the user's email is not yet verified.
 /// </summary>
 public sealed class LoginHandler
 {
@@ -61,6 +63,10 @@ public sealed class LoginHandler
         if (!BCrypt.Net.BCrypt.Verify(command.Password, user.PasswordHash))
             return invalidCreds;
 
+        // Block login until email is verified
+        if (!user.IsEmailVerified)
+            return Error.Custom("EmailNotVerified", _loc.Get("auth.emailNotVerified", lang));
+
         // Issue JWT + refresh token
         var token = _jwt.GenerateToken(user);
         var refreshTokenValue = _jwt.GenerateRefreshToken();
@@ -74,6 +80,6 @@ public sealed class LoginHandler
         });
         await _db.SaveChangesAsync(ct);
 
-        return new LoginResponse(user.Id, user.Email, user.DisplayName, token, user.Language, refreshTokenValue);
+        return new LoginResponse(user.Id, user.Email, user.DisplayName, token, user.Language, refreshTokenValue, true);
     }
 }

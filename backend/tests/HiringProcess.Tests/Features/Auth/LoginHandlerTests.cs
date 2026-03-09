@@ -110,6 +110,7 @@ public sealed class LoginHandlerTests : IDisposable
             Email = email.ToLowerInvariant(),
             DisplayName = "Test User",
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
+            IsEmailVerified = true,
             CreatedAt = DateTime.UtcNow
         };
         _db.Users.Add(user);
