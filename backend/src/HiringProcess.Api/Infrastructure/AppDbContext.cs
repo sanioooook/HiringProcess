@@ -6,7 +6,7 @@ namespace HiringProcess.Api.Infrastructure;
 
 /// <summary>
 /// Single EF Core DbContext for the application.
-/// Used exclusively inside command/query handlers — never injected into controllers.
+/// Used exclusively inside command/query handlers - never injected into controllers.
 /// </summary>
 public sealed class AppDbContext : DbContext
 {
@@ -118,7 +118,7 @@ public sealed class AppDbContext : DbContext
                   .HasColumnName("hiring_stages")
                   .HasDefaultValue(string.Empty);
 
-            // HiringStages is a computed property — exclude from mapping
+            // HiringStages is a computed property - exclude from mapping
             entity.Ignore(h => h.HiringStages);
 
             entity.Property(h => h.CreatedAt).IsRequired();

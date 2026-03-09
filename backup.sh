@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # Database backup / restore helper
 # Usage:
-#   ./backup.sh backup           — create a backup now
-#   ./backup.sh restore <file>   — restore from a .sql.gz file
-#   ./backup.sh list             — list available backups
+#   ./backup.sh backup           - create a backup now
+#   ./backup.sh restore <file>   - restore from a .sql.gz file
+#   ./backup.sh list             - list available backups
 
 set -euo pipefail
 

@@ -6,7 +6,7 @@ export const ru: Record<string, string> = {
   'app.menu.settings': 'Настройки',
   'app.menu.signOut': 'Выйти',
 
-  // Auth — login
+  // Auth - login
   'auth.login.title': 'Вход',
   'auth.login.subtitle': 'Трекер заявок на работу',
   'auth.login.submit': 'Войти',
@@ -17,7 +17,7 @@ export const ru: Record<string, string> = {
   'auth.login.resendVerification': 'Отправить письмо подтверждения',
   'auth.login.verificationSent': 'Письмо отправлено. Проверьте почту.',
 
-  // Auth — register
+  // Auth - register
   'auth.register.title': 'Создать аккаунт',
   'auth.register.subtitle': 'Трекер заявок на работу',
   'auth.register.submit': 'Зарегистрироваться',
@@ -25,33 +25,33 @@ export const ru: Record<string, string> = {
   'auth.register.signIn': 'Войти',
   'auth.register.checkEmail': 'Аккаунт создан! Проверьте почту для подтверждения.',
 
-  // Auth — verify email
+  // Auth - verify email
   'auth.verifyEmail.verifying': 'Подтверждение email...',
   'auth.verifyEmail.success': 'Email подтверждён! Теперь можно войти.',
   'auth.verifyEmail.error': 'Ссылка недействительна или истёк срок.',
   'auth.verifyEmail.signIn': 'Войти',
 
-  // Auth — forgot password
+  // Auth - forgot password
   'auth.forgotPassword.title': 'Восстановление пароля',
   'auth.forgotPassword.subtitle': 'Введите email для получения ссылки на сброс пароля.',
   'auth.forgotPassword.submit': 'Отправить ссылку',
   'auth.forgotPassword.sent': 'Если аккаунт существует, ссылка отправлена.',
   'auth.forgotPassword.backToLogin': 'Назад к входу',
 
-  // Auth — reset password
+  // Auth - reset password
   'auth.resetPassword.title': 'Новый пароль',
   'auth.resetPassword.newPassword': 'Новый пароль',
   'auth.resetPassword.submit': 'Установить пароль',
   'auth.resetPassword.success': 'Пароль обновлён! Теперь можно войти.',
   'auth.resetPassword.error': 'Ссылка недействительна или истёк срок.',
 
-  // Auth — confirm email change
+  // Auth - confirm email change
   'auth.confirmEmailChange.confirming': 'Подтверждение нового email...',
   'auth.confirmEmailChange.success': 'Адрес email успешно изменён.',
   'auth.confirmEmailChange.error': 'Ссылка недействительна или истёк срок.',
   'auth.confirmEmailChange.signIn': 'Войти',
 
-  // Settings — change password
+  // Settings - change password
   'settings.changePassword.title': 'Сменить пароль',
   'settings.changePassword.current': 'Текущий пароль',
   'settings.changePassword.new': 'Новый пароль',
@@ -59,7 +59,7 @@ export const ru: Record<string, string> = {
   'settings.changePassword.submit': 'Сменить пароль',
   'settings.changePassword.success': 'Пароль успешно изменён.',
 
-  // Settings — change email
+  // Settings - change email
   'settings.changeEmail.title': 'Изменить email',
   'settings.changeEmail.current': 'Текущий email',
   'settings.changeEmail.new': 'Новый email',
@@ -88,9 +88,9 @@ export const ru: Record<string, string> = {
   'field.customStage': 'Свой этап',
   'field.customStagePlaceholder': 'Введите и нажмите Enter',
   'field.currentStage': 'Текущий этап',
-  'field.stageNone': '— Нет —',
+  'field.stageNone': '- Нет -',
   'field.appliedWith': 'Подано с',
-  'field.appliedWithNone': '— Нет —',
+  'field.appliedWithNone': '- Нет -',
   'field.appliedLink': 'Ссылка на отклик',
   'field.vacancyLink': 'Ссылка на вакансию',
   'field.coverLetter': 'Сопроводительное письмо (поддерживается Markdown)',

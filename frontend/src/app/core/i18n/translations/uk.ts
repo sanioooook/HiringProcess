@@ -6,7 +6,7 @@ export const uk: Record<string, string> = {
   'app.menu.settings': 'Налаштування',
   'app.menu.signOut': 'Вийти',
 
-  // Auth — login
+  // Auth - login
   'auth.login.title': 'Вхід',
   'auth.login.subtitle': 'Трекер заявок на роботу',
   'auth.login.submit': 'Увійти',
@@ -17,7 +17,7 @@ export const uk: Record<string, string> = {
   'auth.login.resendVerification': 'Надіслати лист підтвердження',
   'auth.login.verificationSent': 'Лист надіслано. Перевірте пошту.',
 
-  // Auth — register
+  // Auth - register
   'auth.register.title': 'Створити обліковий запис',
   'auth.register.subtitle': 'Трекер заявок на роботу',
   'auth.register.submit': 'Зареєструватися',
@@ -25,33 +25,33 @@ export const uk: Record<string, string> = {
   'auth.register.signIn': 'Увійти',
   'auth.register.checkEmail': 'Обліковий запис створено! Перевірте пошту для підтвердження.',
 
-  // Auth — verify email
+  // Auth - verify email
   'auth.verifyEmail.verifying': 'Підтвердження email...',
   'auth.verifyEmail.success': 'Email підтверджено! Тепер можна увійти.',
   'auth.verifyEmail.error': 'Посилання недійсне або термін дії минув.',
   'auth.verifyEmail.signIn': 'Увійти',
 
-  // Auth — forgot password
+  // Auth - forgot password
   'auth.forgotPassword.title': 'Відновлення пароля',
   'auth.forgotPassword.subtitle': 'Введіть email для отримання посилання на скидання пароля.',
   'auth.forgotPassword.submit': 'Надіслати посилання',
   'auth.forgotPassword.sent': 'Якщо обліковий запис існує, посилання надіслано.',
   'auth.forgotPassword.backToLogin': 'Назад до входу',
 
-  // Auth — reset password
+  // Auth - reset password
   'auth.resetPassword.title': 'Новий пароль',
   'auth.resetPassword.newPassword': 'Новий пароль',
   'auth.resetPassword.submit': 'Встановити пароль',
   'auth.resetPassword.success': 'Пароль оновлено! Тепер можна увійти.',
   'auth.resetPassword.error': 'Посилання недійсне або термін дії минув.',
 
-  // Auth — confirm email change
+  // Auth - confirm email change
   'auth.confirmEmailChange.confirming': 'Підтвердження нового email...',
   'auth.confirmEmailChange.success': 'Адресу email успішно змінено.',
   'auth.confirmEmailChange.error': 'Посилання недійсне або термін дії минув.',
   'auth.confirmEmailChange.signIn': 'Увійти',
 
-  // Settings — change password
+  // Settings - change password
   'settings.changePassword.title': 'Змінити пароль',
   'settings.changePassword.current': 'Поточний пароль',
   'settings.changePassword.new': 'Новий пароль',
@@ -59,7 +59,7 @@ export const uk: Record<string, string> = {
   'settings.changePassword.submit': 'Змінити пароль',
   'settings.changePassword.success': 'Пароль успішно змінено.',
 
-  // Settings — change email
+  // Settings - change email
   'settings.changeEmail.title': 'Змінити email',
   'settings.changeEmail.current': 'Поточний email',
   'settings.changeEmail.new': 'Новий email',
@@ -88,9 +88,9 @@ export const uk: Record<string, string> = {
   'field.customStage': 'Власний етап',
   'field.customStagePlaceholder': 'Введіть і натисніть Enter',
   'field.currentStage': 'Поточний етап',
-  'field.stageNone': '— Немає —',
+  'field.stageNone': '- Немає -',
   'field.appliedWith': 'Подано з',
-  'field.appliedWithNone': '— Немає —',
+  'field.appliedWithNone': '- Немає -',
   'field.appliedLink': 'Посилання на відгук',
   'field.vacancyLink': 'Посилання на вакансію',
   'field.coverLetter': 'Супровідний лист (підтримується Markdown)',

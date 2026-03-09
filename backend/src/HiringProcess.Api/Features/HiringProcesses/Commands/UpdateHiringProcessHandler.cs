@@ -32,7 +32,7 @@ public sealed class UpdateHiringProcessHandler
             return Error.Validation(message);
         }
 
-        // Load entity — ownership enforced here
+        // Load entity - ownership enforced here
         var entity = await _db.HiringProcesses
             .FirstOrDefaultAsync(h => h.Id == command.Id && h.UserId == command.UserId, ct);
 

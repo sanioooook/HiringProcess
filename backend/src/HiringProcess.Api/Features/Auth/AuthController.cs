@@ -8,7 +8,7 @@ namespace HiringProcess.Api.Features.Auth;
 
 /// <summary>
 /// HTTP adapter for authentication operations.
-/// Controller only performs HTTP mapping — all business logic is in handlers.
+/// Controller only performs HTTP mapping - all business logic is in handlers.
 /// </summary>
 [ApiController]
 [Route("api/auth")]

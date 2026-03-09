@@ -22,7 +22,7 @@ public sealed class DeleteHiringProcessHandler
 
     public async Task<Result> HandleAsync(DeleteHiringProcessCommand command, CancellationToken ct = default)
     {
-        // Load entity — ownership enforced here
+        // Load entity - ownership enforced here
         var entity = await _db.HiringProcesses
             .FirstOrDefaultAsync(h => h.Id == command.Id && h.UserId == command.UserId, ct);
 

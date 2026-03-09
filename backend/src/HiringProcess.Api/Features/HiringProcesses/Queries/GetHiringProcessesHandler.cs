@@ -32,7 +32,7 @@ public sealed class GetHiringProcessesHandler
             .AsNoTracking()
             .Where(h => h.UserId == query.UserId);
 
-        // Filter by search term — use EF.Functions.Like for case-insensitive search
+        // Filter by search term - use EF.Functions.Like for case-insensitive search
         // that works on both PostgreSQL (case-insensitive collation) and SQLite (LIKE is case-insensitive for ASCII).
         if (!string.IsNullOrWhiteSpace(query.SearchTerm))
         {

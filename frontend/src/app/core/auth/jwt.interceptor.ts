@@ -30,7 +30,7 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
             }))
           ),
           catchError(() => {
-            // Refresh token expired or invalid — force logout
+            // Refresh token expired or invalid - force logout
             auth.logout();
             snack.open(ts.t('snack.sessionExpired'), 'OK', { duration: 5000 });
             return throwError(() => error);

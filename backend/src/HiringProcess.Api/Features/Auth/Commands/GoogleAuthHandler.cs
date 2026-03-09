@@ -69,7 +69,7 @@ public sealed class GoogleAuthHandler
 
         if (user is null)
         {
-            // First-time Google sign-in — create account (email already verified by Google)
+            // First-time Google sign-in - create account (email already verified by Google)
             user = new AppUser
             {
                 Id = Guid.NewGuid(),
@@ -85,7 +85,7 @@ public sealed class GoogleAuthHandler
         }
         else
         {
-            // Returning user — make sure Google ID is linked
+            // Returning user - make sure Google ID is linked
             if (user.GoogleId is null)
                 user.GoogleId = googleId;
         }

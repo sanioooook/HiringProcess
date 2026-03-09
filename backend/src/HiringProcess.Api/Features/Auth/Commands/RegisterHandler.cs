@@ -14,7 +14,7 @@ namespace HiringProcess.Api.Features.Auth.Commands;
 /// <summary>
 /// Handles user registration with email + password.
 /// Validates input, checks for duplicate email, hashes password, persists user, returns JWT.
-/// Sends an email verification link — failure to send is logged but does not fail registration.
+/// Sends an email verification link - failure to send is logged but does not fail registration.
 /// </summary>
 public sealed class RegisterHandler
 {
@@ -101,7 +101,7 @@ public sealed class RegisterHandler
         });
         await _db.SaveChangesAsync(ct);
 
-        // Send verification email (non-blocking — failure doesn't fail registration)
+        // Send verification email (non-blocking - failure doesn't fail registration)
         try
         {
             var frontendUrl = _config["App:FrontendUrl"] ?? "http://localhost:4200";

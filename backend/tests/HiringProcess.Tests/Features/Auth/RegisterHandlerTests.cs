@@ -9,7 +9,7 @@ namespace HiringProcess.Tests.Features.Auth;
 
 /// <summary>
 /// Tests for RegisterHandler.
-/// Each test gets its own in-memory SQLite database — no shared state.
+/// Each test gets its own in-memory SQLite database - no shared state.
 /// </summary>
 public sealed class RegisterHandlerTests : IDisposable
 {

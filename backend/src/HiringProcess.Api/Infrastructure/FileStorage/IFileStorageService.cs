@@ -1,7 +1,7 @@
 namespace HiringProcess.Api.Infrastructure.FileStorage;
 
 /// <summary>
-/// Abstraction for file storage — swappable between local disk and cloud (S3, Azure Blob).
+/// Abstraction for file storage - swappable between local disk and cloud (S3, Azure Blob).
 /// </summary>
 public interface IFileStorageService
 {

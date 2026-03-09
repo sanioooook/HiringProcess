@@ -6,7 +6,7 @@ export const en: Record<string, string> = {
   'app.menu.settings': 'Settings',
   'app.menu.signOut': 'Sign Out',
 
-  // Auth — login
+  // Auth - login
   'auth.login.title': 'Sign In',
   'auth.login.subtitle': 'Job Application Tracker',
   'auth.login.submit': 'Sign In',
@@ -17,7 +17,7 @@ export const en: Record<string, string> = {
   'auth.login.resendVerification': 'Resend verification email',
   'auth.login.verificationSent': 'Verification email sent. Check your inbox.',
 
-  // Auth — register
+  // Auth - register
   'auth.register.title': 'Create Account',
   'auth.register.subtitle': 'Job Application Tracker',
   'auth.register.submit': 'Create Account',
@@ -25,33 +25,33 @@ export const en: Record<string, string> = {
   'auth.register.signIn': 'Sign In',
   'auth.register.checkEmail': 'Account created! Check your email to verify your address.',
 
-  // Auth — verify email
+  // Auth - verify email
   'auth.verifyEmail.verifying': 'Verifying your email...',
   'auth.verifyEmail.success': 'Email verified! You can now sign in.',
   'auth.verifyEmail.error': 'The link is invalid or has expired.',
   'auth.verifyEmail.signIn': 'Sign In',
 
-  // Auth — forgot password
+  // Auth - forgot password
   'auth.forgotPassword.title': 'Forgot Password',
   'auth.forgotPassword.subtitle': 'Enter your email to receive a reset link.',
   'auth.forgotPassword.submit': 'Send Reset Link',
   'auth.forgotPassword.sent': 'If an account exists, a reset link has been sent.',
   'auth.forgotPassword.backToLogin': 'Back to Sign In',
 
-  // Auth — reset password
+  // Auth - reset password
   'auth.resetPassword.title': 'Reset Password',
   'auth.resetPassword.newPassword': 'New Password',
   'auth.resetPassword.submit': 'Set New Password',
   'auth.resetPassword.success': 'Password updated! You can now sign in.',
   'auth.resetPassword.error': 'The link is invalid or has expired.',
 
-  // Auth — confirm email change
+  // Auth - confirm email change
   'auth.confirmEmailChange.confirming': 'Confirming your new email...',
   'auth.confirmEmailChange.success': 'Email address updated successfully.',
   'auth.confirmEmailChange.error': 'The link is invalid or has expired.',
   'auth.confirmEmailChange.signIn': 'Sign In',
 
-  // Settings — change password
+  // Settings - change password
   'settings.changePassword.title': 'Change Password',
   'settings.changePassword.current': 'Current Password',
   'settings.changePassword.new': 'New Password',
@@ -59,7 +59,7 @@ export const en: Record<string, string> = {
   'settings.changePassword.submit': 'Change Password',
   'settings.changePassword.success': 'Password changed successfully.',
 
-  // Settings — change email
+  // Settings - change email
   'settings.changeEmail.title': 'Change Email',
   'settings.changeEmail.current': 'Current Email',
   'settings.changeEmail.new': 'New Email',
@@ -88,9 +88,9 @@ export const en: Record<string, string> = {
   'field.customStage': 'Custom Stage',
   'field.customStagePlaceholder': 'Type and press Enter',
   'field.currentStage': 'Current Stage',
-  'field.stageNone': '— None —',
+  'field.stageNone': '- None -',
   'field.appliedWith': 'Applied With',
-  'field.appliedWithNone': '— None —',
+  'field.appliedWithNone': '- None -',
   'field.appliedLink': 'Applied Link',
   'field.vacancyLink': 'Vacancy Link',
   'field.coverLetter': 'Cover Letter (Markdown supported)',

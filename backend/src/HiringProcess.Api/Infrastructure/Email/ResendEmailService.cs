@@ -28,7 +28,7 @@ public sealed class ResendEmailService : IEmailService
         var apiKey = _config["Resend:ApiKey"];
         if (string.IsNullOrWhiteSpace(apiKey))
         {
-            _logger.LogWarning("Resend:ApiKey is not configured — email to {To} not sent.", to);
+            _logger.LogWarning("Resend:ApiKey is not configured - email to {To} not sent.", to);
             return;
         }
 

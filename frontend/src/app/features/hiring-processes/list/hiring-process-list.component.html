@@ -56,7 +56,7 @@
         @if (row.currentStage) {
           <span class="stage-badge">{{ row.currentStage }}</span>
         } @else {
-          <span class="muted">—</span>
+          <span class="muted">-</span>
         }
       </td>
     </ng-container>
@@ -70,7 +70,7 @@
     <!-- Contact Person -->
     <ng-container matColumnDef="contactPerson">
       <th mat-header-cell *matHeaderCellDef>{{ 'col.contactPerson' | translate }}</th>
-      <td mat-cell *matCellDef="let row">{{ row.contactPerson || '—' }}</td>
+      <td mat-cell *matCellDef="let row">{{ row.contactPerson || '-' }}</td>
     </ng-container>
 
     <!-- Application Date -->
@@ -79,7 +79,7 @@
         {{ 'col.applied' | translate }}
       </th>
       <td mat-cell *matCellDef="let row">
-        {{ row.applicationDate ? (row.applicationDate + 'T00:00:00' | date:'dd.MM.yyyy') : '—' }}
+        {{ row.applicationDate ? (row.applicationDate + 'T00:00:00' | date:'dd.MM.yyyy') : '-' }}
       </td>
     </ng-container>
 
@@ -87,7 +87,7 @@
     <ng-container matColumnDef="firstContactDate">
       <th mat-header-cell *matHeaderCellDef>{{ 'col.firstContact' | translate }}</th>
       <td mat-cell *matCellDef="let row">
-        {{ row.firstContactDate ? (row.firstContactDate + 'T00:00:00' | date:'dd.MM.yyyy') : '—' }}
+        {{ row.firstContactDate ? (row.firstContactDate + 'T00:00:00' | date:'dd.MM.yyyy') : '-' }}
       </td>
     </ng-container>
 
@@ -95,20 +95,20 @@
     <ng-container matColumnDef="lastContactDate">
       <th mat-header-cell *matHeaderCellDef>{{ 'col.lastContact' | translate }}</th>
       <td mat-cell *matCellDef="let row">
-        {{ row.lastContactDate ? (row.lastContactDate + 'T00:00:00' | date:'dd.MM.yyyy') : '—' }}
+        {{ row.lastContactDate ? (row.lastContactDate + 'T00:00:00' | date:'dd.MM.yyyy') : '-' }}
       </td>
     </ng-container>
 
     <!-- Salary Range -->
     <ng-container matColumnDef="salaryRange">
       <th mat-header-cell *matHeaderCellDef>{{ 'col.salary' | translate }}</th>
-      <td mat-cell *matCellDef="let row">{{ row.salaryRange || '—' }}</td>
+      <td mat-cell *matCellDef="let row">{{ row.salaryRange || '-' }}</td>
     </ng-container>
 
     <!-- Applied With -->
     <ng-container matColumnDef="appliedWith">
       <th mat-header-cell *matHeaderCellDef>{{ 'col.appliedWith' | translate }}</th>
-      <td mat-cell *matCellDef="let row">{{ row.appliedWith || '—' }}</td>
+      <td mat-cell *matCellDef="let row">{{ row.appliedWith || '-' }}</td>
     </ng-container>
 
     <!-- Hiring Stages -->
@@ -161,7 +161,7 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns();"
         class="table-row"></tr>
 
-    <!-- Empty state — colspan works correctly in native <table> -->
+    <!-- Empty state - colspan works correctly in native <table> -->
     <tr class="mat-mdc-no-data-row" *matNoDataRow>
       <td class="empty-cell" [attr.colspan]="displayedColumns().length">
         <div class="empty-state">

@@ -3,7 +3,7 @@ using HiringProcess.Api.Infrastructure.Email;
 namespace HiringProcess.Tests.Common;
 
 /// <summary>
-/// No-op email service for tests — discards all messages silently.
+/// No-op email service for tests - discards all messages silently.
 /// </summary>
 public sealed class NullEmailService : IEmailService
 {

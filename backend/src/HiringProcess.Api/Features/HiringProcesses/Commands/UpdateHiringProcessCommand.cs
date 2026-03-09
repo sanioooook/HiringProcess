@@ -2,7 +2,7 @@ namespace HiringProcess.Api.Features.HiringProcesses.Commands;
 
 /// <summary>
 /// Command to update all mutable fields of an existing hiring process.
-/// UserId is used to enforce ownership — users cannot modify other users' records.
+/// UserId is used to enforce ownership - users cannot modify other users' records.
 /// </summary>
 public sealed record UpdateHiringProcessCommand(
     Guid Id,

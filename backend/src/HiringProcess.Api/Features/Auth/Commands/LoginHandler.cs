@@ -54,7 +54,7 @@ public sealed class LoginHandler
         var emailLower = command.Email.ToLowerInvariant();
         var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == emailLower, ct);
 
-        // Verify credentials — same error for missing user or bad password (no enumeration)
+        // Verify credentials - same error for missing user or bad password (no enumeration)
         var invalidCreds = Error.Custom("InvalidCredentials", _loc.Get("auth.invalidCredentials", lang));
 
         if (user is null || user.PasswordHash is null)

@@ -5,7 +5,7 @@ using HiringProcess.Tests.Common;
 namespace HiringProcess.Tests.Features.HiringProcesses;
 
 /// <summary>
-/// Tests for GetHiringProcessByIdHandler — ownership enforcement and not-found scenarios.
+/// Tests for GetHiringProcessByIdHandler - ownership enforcement and not-found scenarios.
 /// </summary>
 public sealed class GetHiringProcessByIdHandlerTests : IDisposable
 {

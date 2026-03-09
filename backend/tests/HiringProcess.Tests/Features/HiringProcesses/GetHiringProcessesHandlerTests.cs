@@ -5,7 +5,7 @@ using HiringProcess.Tests.Common;
 namespace HiringProcess.Tests.Features.HiringProcesses;
 
 /// <summary>
-/// Tests for GetHiringProcessesHandler — pagination, filtering, sorting, and ownership isolation.
+/// Tests for GetHiringProcessesHandler - pagination, filtering, sorting, and ownership isolation.
 /// </summary>
 public sealed class GetHiringProcessesHandlerTests : IDisposable
 {
@@ -24,7 +24,7 @@ public sealed class GetHiringProcessesHandlerTests : IDisposable
     [Fact]
     public async Task HandleAsync_ReturnsOnlyCurrentUserRecords()
     {
-        // Arrange — seed records for two users
+        // Arrange - seed records for two users
         await SeedAsync(_userId, "Acme");
         await SeedAsync(_otherUserId, "Other Corp");
 
@@ -42,7 +42,7 @@ public sealed class GetHiringProcessesHandlerTests : IDisposable
     [Fact]
     public async Task HandleAsync_PaginationWorks()
     {
-        // Arrange — seed 5 records
+        // Arrange - seed 5 records
         for (var i = 1; i <= 5; i++)
             await SeedAsync(_userId, $"Company {i}");
 

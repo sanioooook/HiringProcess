@@ -1,6 +1,6 @@
 @use '@angular/material' as mat;
 
-// Magenta & Violet — official Material palettes for dark theme
+// Magenta & Violet - official Material palettes for dark theme
 $dark-primary: mat.m2-define-palette(mat.$m2-magenta-palette, 500);
 $dark-accent: mat.m2-define-palette(mat.$m2-violet-palette, A200, A100, A400);
 $dark-warn: mat.m2-define-palette(mat.$m2-red-palette);

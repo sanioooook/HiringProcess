@@ -1,7 +1,7 @@
 namespace HiringProcess.Api.Common;
 
 /// <summary>
-/// Represents the outcome of an operation — either success with a value, or failure with an error.
+/// Represents the outcome of an operation - either success with a value, or failure with an error.
 /// Avoids exception-driven flow for business logic errors.
 /// </summary>
 public sealed class Result<T>
