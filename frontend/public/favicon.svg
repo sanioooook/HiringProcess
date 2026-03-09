@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <filter id="drop" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#1565C0" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+
+  <rect x="13" y="8" width="74" height="84" rx="7" fill="#E3F2FD" filter="url(#drop)"/>
+
+  <path d="M20 8 L80 8 Q87 8 87 15 L87 34 L13 34 L13 15 Q13 8 20 8 Z" fill="#1565C0"/>
+
+  <circle cx="50" cy="19" r="7" fill="white"/>
+  <path d="M31 34 Q31 26 50 26 Q69 26 69 34 Z" fill="white"/>
+
+  <rect x="21" y="42" width="12" height="12" rx="3" fill="#1565C0"/>
+  <polyline points="23.5,48 27,52 33,45.5" stroke="white" stroke-width="2.5"
+            fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="37" y="45" width="40" height="5" rx="2.5" fill="#90CAF9"/>
+
+  <rect x="21" y="59" width="12" height="12" rx="3" fill="#1565C0"/>
+  <polyline points="23.5,65 27,69 33,62.5" stroke="white" stroke-width="2.5"
+            fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="37" y="62" width="32" height="5" rx="2.5" fill="#90CAF9"/>
+
+  <rect x="21" y="76" width="12" height="12" rx="3" fill="none"
+        stroke="#90CAF9" stroke-width="2"/>
+  <rect x="37" y="79" width="22" height="5" rx="2.5" fill="#BBDEFB"/>
+</svg>
