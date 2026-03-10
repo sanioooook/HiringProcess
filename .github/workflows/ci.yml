@@ -162,6 +162,7 @@ jobs:
           host: ${{ secrets.DEPLOY_HOST }}
           username: root
           key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: ${{ secrets.DEPLOY_SSH_PORT }}
           script: |
             BACKUP_DIR=~/backups/hiringprocess
             mkdir -p $BACKUP_DIR
@@ -178,6 +179,7 @@ jobs:
           host: ${{ secrets.DEPLOY_HOST }}
           username: root
           key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: ${{ secrets.DEPLOY_SSH_PORT }}
           script: |
             cd ~/app
             docker compose pull
