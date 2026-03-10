@@ -34,8 +34,18 @@ export interface FormDialogData {
 const CONTACT_CHANNELS = ['LinkedIn', 'Email', 'Referral', 'Job Board', 'Company Website', 'Recruiter', 'Cold Outreach'];
 const APPLIED_WITH_OPTIONS = ['Resume', 'Resume + Cover Letter', 'LinkedIn Profile', 'Portfolio', 'GitHub', 'Other'];
 const STAGE_PRESETS = [
-  'stage.applied', 'stage.phoneScreen', 'stage.technicalInterview', 'stage.takeHomeTask',
-  'stage.onsiteInterview', 'stage.offerReceived', 'stage.offerAccepted', 'stage.rejected', 'stage.withdrawn',
+  'stage.applied', 'stage.screening', 'stage.technicalInterview', 'stage.takeHomeTask',
+  'stage.clientInterview', 'stage.offerReceived', 'stage.offerAccepted', 'stage.rejected', 'stage.offerWithdrawn',
+];
+
+const DEFAULT_STAGE_KEYS = [
+  'stage.applied',
+  'stage.screening',
+  'stage.takeHomeTask',
+  'stage.technicalInterview',
+  'stage.offerReceived',
+  'stage.offerAccepted',
+  'stage.rejected',
 ];
 
 @Component({
@@ -109,7 +119,9 @@ export class HiringProcessFormDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.data.mode === 'edit' && this.data.record) {
+    if (this.data.mode === 'create') {
+      this.stages = DEFAULT_STAGE_KEYS.map(key => this.ts.t(key));
+    } else if (this.data.mode === 'edit' && this.data.record) {
       const r = this.data.record;
       this.form.patchValue({
         companyName: r.companyName,

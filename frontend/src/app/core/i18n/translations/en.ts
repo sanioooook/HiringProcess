@@ -179,14 +179,23 @@ export const en: Record<string, string> = {
 
   // Stage presets
   'stage.applied': 'Applied',
-  'stage.phoneScreen': 'Phone Screen',
+  'stage.screening': 'Screening',
   'stage.technicalInterview': 'Technical Interview',
   'stage.takeHomeTask': 'Take-Home Task',
-  'stage.onsiteInterview': 'On-site Interview',
+  'stage.clientInterview': 'Client Interview',
   'stage.offerReceived': 'Offer Received',
   'stage.offerAccepted': 'Offer Accepted',
   'stage.rejected': 'Rejected',
-  'stage.withdrawn': 'Withdrawn',
+  'stage.offerWithdrawn': 'Offer Withdrawn',
+
+  // Paginator
+  'paginator.itemsPerPage': 'Items per page:',
+  'paginator.nextPage': 'Next page',
+  'paginator.previousPage': 'Previous page',
+  'paginator.firstPage': 'First page',
+  'paginator.lastPage': 'Last page',
+  'paginator.rangeOf': '{start} of {total}',
+  'paginator.range': '{start} – {end} of {total}',
 
   // Snackbar messages
   'snack.deleted': 'Record deleted.',

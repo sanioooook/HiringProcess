@@ -14,15 +14,16 @@
 
   <!-- Column toggle -->
   <button mat-stroked-button (click)="openColumnSelector()"
+          class="btn-columns"
           [matTooltip]="'list.columns' | translate">
     <mat-icon>view_column</mat-icon>
-    {{ 'list.columns' | translate }}
+    <span class="btn-label">{{ 'list.columns' | translate }}</span>
   </button>
 
   <!-- Add -->
-  <button mat-flat-button color="primary" (click)="openCreate()">
+  <button mat-flat-button color="primary" (click)="openCreate()" class="btn-add">
     <mat-icon>add</mat-icon>
-    {{ 'list.addApplication' | translate }}
+    <span class="btn-label">{{ 'list.addApplication' | translate }}</span>
   </button>
 
 </div>

@@ -1,29 +1,43 @@
 <div class="settings-page">
-  <mat-card class="settings-card">
-    <mat-card-header>
-      <mat-card-title>{{ 'settings.title' | translate }}</mat-card-title>
-    </mat-card-header>
+  <div class="settings-header">
+    <a mat-icon-button routerLink="/app" [matTooltip]="'settings.back' | translate">
+      <mat-icon>arrow_back</mat-icon>
+    </a>
+    <span class="settings-title">{{ 'settings.title' | translate }}</span>
+  </div>
 
-    <mat-card-content>
+  <div class="settings-grid">
 
-      <!-- Language -->
-      <div class="setting-row">
-        <p class="setting-label">{{ 'settings.language' | translate }}</p>
+    <!-- Language card -->
+    <mat-card class="settings-card">
+      <mat-card-header>
+        <mat-card-title>{{ 'settings.language' | translate }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
         <mat-radio-group class="lang-group" [ngModel]="selectedLang()" (ngModelChange)="selectedLang.set($event)">
           @for (lang of languages; track lang.value) {
-            <mat-radio-button [value]="lang.value">
-              {{ lang.labelKey | translate }}
-            </mat-radio-button>
+            <mat-radio-button [value]="lang.value">{{ lang.labelKey | translate }}</mat-radio-button>
           }
         </mat-radio-group>
-      </div>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button mat-flat-button color="primary" (click)="save()" [disabled]="loading()">
+          @if (loading()) {
+            <mat-spinner diameter="18" />
+          } @else {
+            {{ 'settings.save' | translate }}
+          }
+        </button>
+      </mat-card-actions>
+    </mat-card>
 
-      <mat-divider />
-
-      <!-- Change Password (only for password-based accounts) -->
-      @if (auth.user()?.hasPassword) {
-        <div class="setting-row">
-          <p class="setting-label">{{ 'settings.changePassword.title' | translate }}</p>
+    <!-- Change Password card -->
+    @if (auth.user()?.hasPassword) {
+      <mat-card class="settings-card">
+        <mat-card-header>
+          <mat-card-title>{{ 'settings.changePassword.title' | translate }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
           <form [formGroup]="pwForm" (ngSubmit)="changePassword()" class="form-fields">
 
             <mat-form-field appearance="outline" class="full-width">
@@ -82,20 +96,20 @@
               </button>
             </div>
           </form>
-        </div>
+        </mat-card-content>
+      </mat-card>
+    }
 
-        <mat-divider />
-      }
-
-      <!-- Change Email -->
-      <div class="setting-row">
-        <p class="setting-label">{{ 'settings.changeEmail.title' | translate }}</p>
-
+    <!-- Change Email card -->
+    <mat-card class="settings-card">
+      <mat-card-header>
+        <mat-card-title>{{ 'settings.changeEmail.title' | translate }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
         <p class="current-email">
           <mat-icon>email</mat-icon>
           {{ auth.user()?.email }}
         </p>
-
         <form [formGroup]="emailForm" (ngSubmit)="changeEmail()" class="form-fields">
 
           <mat-form-field appearance="outline" class="full-width">
@@ -132,19 +146,8 @@
             </button>
           </div>
         </form>
-      </div>
+      </mat-card-content>
+    </mat-card>
 
-    </mat-card-content>
-
-    <mat-card-actions align="end">
-      <a mat-button routerLink="/app">{{ 'settings.back' | translate }}</a>
-      <button mat-flat-button color="primary" (click)="save()" [disabled]="loading()">
-        @if (loading()) {
-          <mat-spinner diameter="18" />
-        } @else {
-          {{ 'settings.save' | translate }}
-        }
-      </button>
-    </mat-card-actions>
-  </mat-card>
+  </div>
 </div>

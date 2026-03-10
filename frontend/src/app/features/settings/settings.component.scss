@@ -1,23 +1,31 @@
 .settings-page {
+  padding: 24px 24px 32px;
+}
+
+.settings-header {
   display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.settings-title {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.settings-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
   justify-content: center;
-  align-items: flex-start;
-  padding: 40px 16px;
-  min-height: 100%;
 }
 
 .settings-card {
-  width: 100%;
+  flex: 1 1 360px;
   max-width: 480px;
-}
-
-.setting-row {
-  padding: 16px 0;
-}
-
-.setting-label {
-  font-weight: 500;
-  margin-bottom: 12px;
+  min-width: 280px;
+  align-self: flex-start;
 }
 
 .lang-group {

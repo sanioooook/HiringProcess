@@ -178,15 +178,24 @@ export const uk: Record<string, string> = {
   'settings.back': 'Назад',
 
   // Stage presets
-  'stage.applied': 'Відгукнувся',
-  'stage.phoneScreen': 'Телефонний скринінг',
+  'stage.applied': 'Відгук',
+  'stage.screening': 'Скринінг',
   'stage.technicalInterview': 'Технічне інтерв\'ю',
   'stage.takeHomeTask': 'Тестове завдання',
-  'stage.onsiteInterview': 'Очне інтерв\'ю',
-  'stage.offerReceived': 'Отримано оффер',
-  'stage.offerAccepted': 'Прийнято оффер',
+  'stage.clientInterview': 'Інтерв\'ю з клієнтом',
+  'stage.offerReceived': 'Офер отримано',
+  'stage.offerAccepted': 'Офер прийнято',
   'stage.rejected': 'Відмова',
-  'stage.withdrawn': 'Знято',
+  'stage.offerWithdrawn': 'Офер відкликано',
+
+  // Paginator
+  'paginator.itemsPerPage': 'На сторінці:',
+  'paginator.nextPage': 'Наступна сторінка',
+  'paginator.previousPage': 'Попередня сторінка',
+  'paginator.firstPage': 'Перша сторінка',
+  'paginator.lastPage': 'Остання сторінка',
+  'paginator.rangeOf': '{start} з {total}',
+  'paginator.range': '{start} – {end} з {total}',
 
   // Snackbar messages
   'snack.deleted': 'Запис видалено.',

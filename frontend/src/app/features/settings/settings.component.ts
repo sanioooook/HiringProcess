@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslatePipe } from '../../core/i18n/translate.pipe';
 import { TranslationService, SupportedLanguage } from '../../core/i18n/translation.service';
 import { AuthService } from '../../core/auth/auth.service';
@@ -37,6 +38,7 @@ function passwordMatch(control: AbstractControl): ValidationErrors | null {
     MatDividerModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
+    MatTooltipModule,
     TranslatePipe,
   ],
   templateUrl: './settings.component.html',

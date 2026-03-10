@@ -3,10 +3,12 @@ import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
+import { MatPaginatorIntl } from '@angular/material/paginator';
 import { provideMarkdown } from 'ngx-markdown';
 import { routes } from './app.routes';
 import { jwtInterceptor } from './core/auth/jwt.interceptor';
 import { CustomDateAdapter } from './core/date/custom-date-adapter';
+import { AppPaginatorIntl } from './core/i18n/paginator-intl';
 
 /** Display format shown in the input field. Parse format for typed input. */
 const DD_MM_YYYY_FORMATS = {
@@ -27,6 +29,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     { provide: DateAdapter, useClass: CustomDateAdapter },
     { provide: MAT_DATE_FORMATS, useValue: DD_MM_YYYY_FORMATS },
+    { provide: MatPaginatorIntl, useClass: AppPaginatorIntl },
     provideMarkdown(),
   ],
 };

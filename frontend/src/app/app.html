@@ -2,7 +2,7 @@
   <mat-toolbar color="primary" class="app-toolbar">
     <span class="app-title">
       <mat-icon>work</mat-icon>
-      {{ 'app.title' | translate }}
+      <span class="app-title-text">{{ 'app.title' | translate }}</span>
     </span>
 
     <span class="spacer"></span>
@@ -17,7 +17,7 @@
     <!-- User menu -->
     <button mat-button [matMenuTriggerFor]="userMenu">
       <mat-icon>account_circle</mat-icon>
-      {{ auth.user()?.displayName }}
+      <span class="user-name">{{ auth.user()?.displayName }}</span>
     </button>
 
     <mat-menu #userMenu="matMenu">

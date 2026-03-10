@@ -178,15 +178,24 @@ export const ru: Record<string, string> = {
   'settings.back': 'Назад',
 
   // Stage presets
-  'stage.applied': 'Откликнулся',
-  'stage.phoneScreen': 'Телефонный скрининг',
+  'stage.applied': 'Отклик',
+  'stage.screening': 'Скрининг',
   'stage.technicalInterview': 'Техническое интервью',
   'stage.takeHomeTask': 'Тестовое задание',
-  'stage.onsiteInterview': 'Очное интервью',
-  'stage.offerReceived': 'Оффер получен',
-  'stage.offerAccepted': 'Оффер принят',
+  'stage.clientInterview': 'Интервью с клиентом',
+  'stage.offerReceived': 'Офер получен',
+  'stage.offerAccepted': 'Офер принят',
   'stage.rejected': 'Отказ',
-  'stage.withdrawn': 'Отозван',
+  'stage.offerWithdrawn': 'Офер отозван',
+
+  // Paginator
+  'paginator.itemsPerPage': 'На странице:',
+  'paginator.nextPage': 'Следующая страница',
+  'paginator.previousPage': 'Предыдущая страница',
+  'paginator.firstPage': 'Первая страница',
+  'paginator.lastPage': 'Последняя страница',
+  'paginator.rangeOf': '{start} из {total}',
+  'paginator.range': '{start} – {end} из {total}',
 
   // Snackbar messages
   'snack.deleted': 'Запись удалена.',

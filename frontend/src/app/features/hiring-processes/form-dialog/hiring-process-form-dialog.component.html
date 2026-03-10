@@ -100,6 +100,17 @@
       <mat-tab [label]="'dialog.tab.pipeline' | translate">
         <div class="tab-body">
 
+          <!-- Current stage (first) -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'field.currentStage' | translate }}</mat-label>
+            <mat-select formControlName="currentStage">
+              <mat-option value="">{{ 'field.stageNone' | translate }}</mat-option>
+              @for (s of stages; track s) {
+                <mat-option [value]="s">{{ s }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
           <!-- Stages chip builder -->
           <div class="field-label">{{ 'field.hiringStages' | translate }}</div>
           <div class="stage-chip-list">
@@ -133,17 +144,6 @@
                     [matTooltip]="'dialog.addStage' | translate">
               <mat-icon>add</mat-icon>
             </button>
-          </mat-form-field>
-
-          <!-- Current stage -->
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>{{ 'field.currentStage' | translate }}</mat-label>
-            <mat-select formControlName="currentStage">
-              <mat-option value="">{{ 'field.stageNone' | translate }}</mat-option>
-              @for (s of stages; track s) {
-                <mat-option [value]="s">{{ s }}</mat-option>
-              }
-            </mat-select>
           </mat-form-field>
 
           <!-- Applied With -->
