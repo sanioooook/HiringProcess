@@ -61,6 +61,8 @@ services:
     restart: unless-stopped
     depends_on:
       - backend
+    environment:
+      APP_FRONTEND_URL: ${APP_FRONTEND_URL:-http://localhost}
     ports:
       - "80:80"
     healthcheck:
