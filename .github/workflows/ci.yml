@@ -21,14 +21,28 @@ jobs:
       frontend: ${{ steps.filter.outputs.frontend }}
     steps:
       - uses: actions/checkout@v6
-      - uses: dorny/paths-filter@v3
-        id: filter
         with:
-          filters: |
-            backend:
-              - 'backend/**'
-            frontend:
-              - 'frontend/**'
+          fetch-depth: 2  # need parent commit for push diff
+
+      - name: Detect changed paths
+        id: filter
+        run: |
+          # New branch — no parent commit yet, build everything
+          if [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
+            echo "backend=true"  >> $GITHUB_OUTPUT
+            echo "frontend=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git fetch origin ${{ github.base_ref }} --depth=1
+            CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
+          else
+            CHANGED=$(git diff --name-only HEAD~1 HEAD)
+          fi
+
+          echo "$CHANGED" | grep -q "^backend/"  && echo "backend=true"  >> $GITHUB_OUTPUT || echo "backend=false"  >> $GITHUB_OUTPUT
+          echo "$CHANGED" | grep -q "^frontend/" && echo "frontend=true" >> $GITHUB_OUTPUT || echo "frontend=false" >> $GITHUB_OUTPUT
 
   # Build backend + run unit tests
   backend:
