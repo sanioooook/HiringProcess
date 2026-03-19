@@ -1,0 +1,11 @@
+# Normalize line endings for cross-platform compatibility
+* text=auto
+
+# Force LF for shell scripts (must run on Linux containers)
+*.sh text eol=lf
+
+# Force LF for nginx and Docker configs
+nginx.conf text eol=lf
+Dockerfile text eol=lf
+docker-compose.yml text eol=lf
+.env.example text eol=lf
